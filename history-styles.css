@@ -1,0 +1,124 @@
+/* history-styles.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #4F759B;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav li {
+    margin-right: 10px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #b36e00;
+    border: 1px solid #004080;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+nav a:hover {
+    background-color: #004080;
+    transform: scale(1.05);
+}
+
+.container.history-section {
+    background-color: #f8f9fa;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    width: 60%; /* Adjust */
+    box-sizing: border-box;
+    overflow: hidden;
+    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.result-section {
+    width: 100%; /* Make result section full width */
+    box-sizing: border-box;
+    padding: 20px;
+    margin: 20px;
+    border: 2px solid #ddd;
+    border-radius: 15px;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-item {
+    background-color: #fafafa;
+    border: 2px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    text-align: center;
+}
+
+.transaction-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: #ddd;
+    bottom: 0;
+    left: 0;
+}
+
+.transaction-details {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 90%; /* Adjusted */
+    margin: 0 auto;
+}
+
+.transaction-details p {
+    flex: 1;
+    margin: 8px;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+    line-height: 1.5;
+    max-width: 200px; /* Adjusted */
+    box-sizing: border-box;
+}
+
+footer {
+    background-color: #4F759B;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: auto;
+    border-top: 2px solid #004080;
+}
