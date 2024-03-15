@@ -1,0 +1,75 @@
+<!-- admin.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrator Page</title>
+    <link rel="stylesheet" type="text/css" href="/CSS Files/admin-styles.css">
+</head>
+<body>
+    <header>
+        <h1>Administrator</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="stock-trading.html">Stock Trading</a></li>
+                <li><a href="history.html">History</a></li>
+                <li><a href="account.html">Account</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container admin-section">
+        <!-- Create New Stocks Form -->
+        <div class="admin-function">
+            <h3>Create New Stocks</h3>
+            <form id="createStockForm">
+                <label for="companyName">Company Name:</label>
+                <input type="text" id="companyName" name="companyName" required>
+
+                <label for="stockTicker">Stock Ticker:</label>
+                <input type="text" id="stockTicker" name="stockTicker" required>
+
+                <label for="volume">Volume:</label>
+                <input type="number" id="volume" name="volume" required>
+
+                <label for="initialPrice">Initial Price:</label>
+                <input type="number" id="initialPrice" name="initialPrice" required>
+
+                <button type="submit">Create Stock</button>
+            </form>
+        </div>
+
+        <!-- Change Market Hours Form -->
+        <div class="admin-function">
+            <h3>Change Market Hours</h3>
+            <form id="changeMarketHoursForm">
+                <label for="newMarketHours">New Market Hours:</label>
+                <input type="text" id="newMarketHours" name="newMarketHours" required>
+
+                <button type="submit">Change Market Hours</button>
+            </form>
+        </div>
+
+        <!-- Change Market Schedule Form -->
+        <div class="admin-function">
+            <h3>Change Market Schedule</h3>
+            <form id="changeMarketScheduleForm">
+                <label for="newMarketSchedule">New Market Schedule:</label>
+                <input type="text" id="newMarketSchedule" name="newMarketSchedule" required>
+
+                <button type="submit">Change Market Schedule</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Company Name. All rights reserved.</p>
+    </footer>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>
