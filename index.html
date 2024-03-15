@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="/CSS Files/index1.css">
 </head>
 <body>
     <header>
@@ -15,7 +15,7 @@
                 <li><a href="stock-trading.html">Stock Trading</a></li>
                 <li><a href="history.html">History</a></li>
                 <li><a href="account.html">Account</a></li>
-                <li><a href="admin.html">Admin</a></li>
+                <li id="adminLink" style="display: none;"><a href="admin.html">Admin</a></li>
             </ul>
         </nav>
     </header>
@@ -50,7 +50,7 @@
                 <label for="loginPassword">Password:</label>
                 <input type="password" id="loginPassword" name="loginPassword" required>
 
-                <button type="button" id="loginButton" disabled>Login</button>
+                <button type="button" id="loginButton" onClick="login()">Login</button>
             </form>
         </div>
     </div>
@@ -59,6 +59,6 @@
         <p>&copy; 2024 Company Name. All rights reserved.</p>
     </footer>
 
-    <script src="index-script.js"></script>
+    <script src="/Java Files/index-script1.js"></script>
 </body>
 </html>

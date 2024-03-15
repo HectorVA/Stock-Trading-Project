@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home Page</title>
+    <link rel="stylesheet" type="text/css" href="/CSS Files/home.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome, <span id="userName">User Name</span>!</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="stock-trading.html">Stock Trading</a></li>
+                <li><a href="history.html">History</a></li>
+                <li><a href="account.html">Account</a></li>
+                <li id="adminLink" style="display: none;"><a href="admin.html">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="portfolio">
+            <h2>Your Stocks</h2>
+            <ul>
+                <li>Stock 1 - Quantity: 10</li>
+                <li>Stock 2 - Quantity: 5</li>
+                <li>Stock 3 - Quantity: 20</li>
+                <!-- Add more stocks as needed -->
+            </ul>
+        </section>
+        <section class="balance">
+            <h2>Balance</h2>
+            <p>Total Stock Value: $10,000</p>
+            <p>Purchasing Power: $5,000</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Company Name. All rights reserved.</p>
+    </footer>
+</body>
+</html>
