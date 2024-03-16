@@ -1,58 +1,33 @@
-// index-script.js
 document.addEventListener('DOMContentLoaded', function () {
-    var createAccountForm = document.getElementById('createAccountForm');
-    var submitCreateAccountButton = document.getElementById('submitCreateAccountButton');
-
-    // Add event listener to the create account form inputs
-    createAccountForm.addEventListener('input', function () {
-        // Check if all inputs have values
-        var allInputsFilled = firstName.value.trim() !== '' &&
-                              lastName.value.trim() !== '' &&
-                              userName.value.trim() !== '' &&
-                              email.value.trim() !== '' &&
-                              password.value.trim() !== '';
-
-        // Enable submit button based on input values
-        submitCreateAccountButton.disabled = !allInputsFilled;
-    });
-
-    //  reset the form after submission
-    createAccountForm.addEventListener('submit', function (event) {
-        // Reset form fields
-        firstName.value = '';
-        lastName.value = '';
-        userName.value = '';
-        email.value = '';
-        password.value = '';
-        submitCreateAccountButton.disabled = true; // Disable button again after submission
-
-        // Prevent the form from submitting (For revenger to handle form submission differently)
-        event.preventDefault();
-    });
-
-    var loginForm = document.getElementById('loginForm');
     var loginButton = document.getElementById('loginButton');
     var loginUserName = document.getElementById('loginUserName');
     var loginPassword = document.getElementById('loginPassword');
 
-    // Add event listener to the login form inputs
-    loginForm.addEventListener('input', function () {
-        // Check if all inputs have values
-        var loginInputsFilled = loginUserName.value.trim() !== '' &&
-                                loginPassword.value.trim() !== '';
+    // Initially disable the login button
+    loginButton.disabled = true;
 
-        //  login button based on input values
-        loginButton.disabled = !loginInputsFilled;
-    });
-
-    //  reset the form after submission
-    loginForm.addEventListener('submit', function (event) {
-        // Reset form fields
-        loginUserName.value = '';
-        loginPassword.value = '';
-        loginButton.disabled = true; // Disable button again after submission
-
-        // Prevent the form from submitting (For revenger to handle form submission differently)
-        event.preventDefault();
+    document.getElementById('loginForm').addEventListener('input', function () {
+        // Enable the login button if both fields have some input
+        loginButton.disabled = loginUserName.value.trim() === '' || loginPassword.value.trim() === '';
     });
 });
+
+// Define the login function as called from the HTML
+function login() {
+    event.preventDefault(); // Prevent the form from submitting traditionally
+
+    var email = document.getElementById('loginUserName').value;
+    var password = document.getElementById('loginPassword').value;
+
+    if (email.includes('@admin.company.com') && password) {
+        document.getElementById('adminLink').style.display = 'block'; // Show the admin link if conditions are met
+        alert('Logged in as admin!');
+    } else if (password) {
+        alert('Logged in successfully!');
+    } else {
+        alert('Please enter a password!');
+    }
+
+    // Optionally reset the form fields here if needed
+}
+
