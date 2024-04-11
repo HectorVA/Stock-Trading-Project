@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var loginForm = document.getElementById('loginForm');
     
     createAccountForm.addEventListener('submit', function(event) {
-       
+        event.preventDefault();
 
         var firstName = document.getElementById('firstName').value;
         var lastName = document.getElementById('lastName').value;
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     loginForm.addEventListener('submit', function(event) {
-        
+        event.preventDefault();
 
         var userName = document.getElementById('loginUserName').value;
         var password = document.getElementById('loginPassword').value;
