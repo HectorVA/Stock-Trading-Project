@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var userName = document.getElementById('loginUserName').value;
         var password = document.getElementById('loginPassword').value;
 
-        fetch('/login', {
+        fetch('http://52.53.164.57:3000/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
