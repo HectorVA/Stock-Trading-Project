@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var email = document.getElementById('email').value;
         var password = document.getElementById('password').value;
 
-        fetch('/create-account', {
+        fetch('http://52.53.164.57:3000/create-account', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
