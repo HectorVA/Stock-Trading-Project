@@ -18,11 +18,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                firstName: firstName,
-                lastName: lastName,
-                userName: userName,
-                email: email,
-                password: password
+                FirstName: firstName,
+                LastName: lastName,
+                Username: userName,
+                Email: email,
+                Password: password
             })
         })
         .then(response => response.json())
@@ -51,8 +51,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                userName: userName,
-                password: password
+                Username: userName,
+                Password: password
             })
         })
         .then(response => response.json())
