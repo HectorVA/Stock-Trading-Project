@@ -76,7 +76,8 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('An error occurred during login.');
+            alert('An error occurred during login. Please check your internet connection and try again.');
+        
         });
     });
 });
