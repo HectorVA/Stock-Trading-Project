@@ -21,6 +21,13 @@ header {
     box-sizing: border-box;
 }
 
+header img {
+    width: auto;
+    height: 200px; /* Adjust height as needed */
+    margin-right: 20px; /* Add some space between the logo and the text */
+    padding-bottom: 20px;
+}
+
 nav ul {
     list-style: none;
     padding: 0;

@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 alert('Account created successfully!');
+                createAccountForm.requestFullscreen();
             } else {
                 alert('Account creation failed: ' + data.message);
             }
