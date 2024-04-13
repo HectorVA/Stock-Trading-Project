@@ -79,3 +79,4 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('An error occurred during login.');
         });
     });
+});
