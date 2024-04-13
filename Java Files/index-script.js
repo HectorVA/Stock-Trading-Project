@@ -42,10 +42,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     loginForm.addEventListener('submit', function(event) {
         event.preventDefault();
-
+    
         var userName = document.getElementById('loginUserName').value;
         var password = document.getElementById('loginPassword').value;
-
+    
         fetch('http://52.53.164.57:3000/login', {
             method: 'POST',
             headers: {
@@ -60,15 +60,16 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 alert('Logged in successfully!');
-
-                var isAdmin = userName.includes('@admin.tradewise.com');
-
-                var redirectUrl = 'home.html?username=' + encodeURIComponent(userName);
-                if (isAdmin) {
-                    redirectUrl += '&isAdmin=true';
+    
+                // Check if the user's email contains '@admin.tradewise.com'
+                var userEmail = data.email; // Assuming 'email' is the field returned by the server
+                if (userEmail.includes('@admin.tradewise.com')) {
+                    document.getElementById('adminLink').style.display = 'block';
                 }
+    
+                // Redirect to home.html after successful login
+                var redirectUrl = 'home.html?username=' + encodeURIComponent(userName);
                 window.location.href = redirectUrl;
-               
             } else {
                 alert('Login failed: ' + data.message);
             }
@@ -78,4 +79,3 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('An error occurred during login.');
         });
     });
-});
