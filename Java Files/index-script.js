@@ -60,7 +60,8 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 alert('Logged in successfully!');
-                window.location.href = 'home.html';
+                var redirectUrl = 'home.html?username=' + encodeURIComponent(userName);
+                window.location.href = 'redirectUrl';
                 // Handle redirection after login or other logic
                 if (userName.includes('@admin.tradewise.com')) {
                     document.getElementById('adminLink').style.display = 'block';
