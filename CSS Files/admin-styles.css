@@ -183,12 +183,21 @@ footer {
         border-top: 1px solid #004080;
     }
 
-    #navbar ul li {
-        text-align: left;
+    #navbar.showMenu ul {
+        display: flex;
+        flex-direction: column;
+        background-color: #4F759B;
     }
 
-    #navbar ul li a {
+    #navbar.showMenu ul li {
+        text-align: center;
+        color: #fff;
+    }
+
+    #navbar.showMenu ul li a {
         display: block;
+        color: #fff;
+        background-color: #b36e00;
     }
 
     /* Container to slide in nav */
