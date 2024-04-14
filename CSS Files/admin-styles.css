@@ -28,7 +28,7 @@ header img {
     padding-bottom: 20px;
 }
 
-nav ul {
+#navbar ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -36,11 +36,11 @@ nav ul {
     justify-content: center;
 }
 
-nav li {
+#navbar li {
     margin-right: 10px;
 }
 
-nav a {
+#navbar a {
     text-decoration: none;
     color: #fff;
     padding: 10px 20px;
@@ -51,7 +51,7 @@ nav a {
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-nav a:hover {
+#navbar a:hover {
     background-color: #004080;
     transform: scale(1.05);
 }
