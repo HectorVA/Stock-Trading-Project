@@ -1,18 +1,18 @@
 // admin-script.js
 
+function toggleMenu() {
+    var navbar = document.getElementById('navbar');
+    if (navbar.style.display === "flex") {
+        navbar.style.display = "none";
+    } else {
+        navbar.style.display = "flex";
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var createStockForm = document.querySelector('.container.admin-section .admin-function:nth-child(1) form');
     var changeMarketHoursForm = document.querySelector('.container.admin-section .admin-function:nth-child(2) form');
     var changeMarketScheduleForm = document.querySelector('.container.admin-section .admin-function:nth-child(3) form');
-
-    function toggleMenu() {
-        var navbar = document.getElementById('navbar');
-        if (navbar.style.display === "flex") {
-            navbar.style.display = "none";
-        } else {
-            navbar.style.display = "flex";
-        }
-    }
 
     createStockForm.addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent default form submission
