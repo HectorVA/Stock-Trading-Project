@@ -5,6 +5,15 @@ document.addEventListener('DOMContentLoaded', function () {
     var changeMarketHoursForm = document.querySelector('.container.admin-section .admin-function:nth-child(2) form');
     var changeMarketScheduleForm = document.querySelector('.container.admin-section .admin-function:nth-child(3) form');
 
+    function toggleMenu() {
+        var navbar = document.getElementById('navbar');
+        if (navbar.style.display === "flex") {
+            navbar.style.display = "none";
+        } else {
+            navbar.style.display = "flex";
+        }
+    }
+
     createStockForm.addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent default form submission
 
@@ -62,4 +71,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Implement logic to change market schedule
         console.log(`Changing market schedule to: ${newMarketSchedule}`);
     }
+
+    
 });
