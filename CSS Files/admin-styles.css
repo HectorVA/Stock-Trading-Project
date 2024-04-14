@@ -159,10 +159,6 @@ footer {
     width: 25px; /* Set a fixed width */
 }
 
-/* When menu is toggled */
-.showMenu #navbar ul {
-    display: flex;
-}
 
 /* Media Query */
 @media (max-width: 576px) {
@@ -207,10 +203,6 @@ footer {
         align-items: flex-start;
     }
 
-    /* Show menu when it's toggled */
-    .showMenu {
-        display: flex;
-    }
 }
 
 
