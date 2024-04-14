@@ -135,14 +135,14 @@ footer {
 /* Media Queries */
 
 @media (max-width: 1200px) {
-    form, .buy-sell-form {
+    form, .container.stock-trading-section {
         flex: 0 1 calc(95% - 20px);
         margin: 0 10px;
     }
 }
 
 @media (max-width: 768px) {
-    form, .buy-sell-form  {
+    form, .container.stock-trading-section  {
         flex: 0 1 calc(95% - 20px);
         margin: 0 10px;
     }
