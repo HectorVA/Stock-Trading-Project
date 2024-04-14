@@ -163,7 +163,7 @@ footer {
     }
 
     /* Hide the full nav menu */
-    nav ul {
+    #navbar ul {
         flex-direction: column;
         width: 100%;
         display: none; /* Hide by default, shown when menu is toggled */
@@ -174,11 +174,11 @@ footer {
         border-top: 1px solid #004080;
     }
 
-    nav ul li {
+    #navbar ul li {
         text-align: left;
     }
 
-    nav ul li a {
+    #navbar ul li a {
         display: block;
     }
 
