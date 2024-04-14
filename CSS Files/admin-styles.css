@@ -142,7 +142,7 @@ footer {
 
 /* Hamburger Icon Styles */
 #hamburger {
-    display: flex; /* It should not display on larger screens */
+    display: none; /* It should not display on larger screens */
     flex-direction: column;
     cursor: pointer;
     position: absolute; /* Position it at the top-left */
