@@ -141,6 +141,20 @@ footer {
 /* Media Queries */
 
 
+@media (max-width: 1200px) {
+    form, .container.admin-section {
+        flex: 0 1 calc(95% - 20px);
+        margin: 0 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    form, .container.admin-section  {
+        flex: 0 1 calc(95% - 20px);
+        margin: 0 10px;
+    }
+}
+
 @media (max-width: 992px) {
     nav li {
         margin-right: 5px;
