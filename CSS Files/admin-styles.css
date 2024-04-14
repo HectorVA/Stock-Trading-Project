@@ -142,17 +142,26 @@ footer {
 
 /* Hamburger Icon Styles */
 #hamburger {
-    display: none; /* Hidden by default, shown in media query below */
+    display: none; /* It should not display on larger screens */
     flex-direction: column;
     cursor: pointer;
+    position: absolute; /* Position it at the top-left */
+    top: 10px; /* Adjust as needed */
+    left: 10px; /* Adjust as needed */
     padding: 10px;
+    z-index: 100; /* Ensure it's above other elements */
 }
 
 #hamburger div {
-    height: 3px;
+    height: 2px;
     background: #fff;
-    margin: 5px 0;
-    transition: all 0.3s;
+    margin: 4px 0;
+    width: 25px; /* Set a fixed width */
+}
+
+/* When menu is toggled */
+.showMenu #navbar ul {
+    display: flex;
 }
 
 /* Media Query */

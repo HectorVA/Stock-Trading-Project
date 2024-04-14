@@ -2,11 +2,7 @@
 
 function toggleMenu() {
     var navbar = document.getElementById('navbar');
-    if (navbar.style.display === "flex") {
-        navbar.style.display = "none";
-    } else {
-        navbar.style.display = "flex";
-    }
+    navbar.classList.toggle('showMenu'); // This toggles the class on and off
 }
 
 document.addEventListener('DOMContentLoaded', function () {
