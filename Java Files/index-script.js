@@ -58,11 +58,22 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             if (data.success) {
                 alert('Logged in successfully!');
-                localStorage.setItem('userEmail', data.Email);
-                localStorage.setItem('isAdmin', data.Email.includes('@admin.tradewise.com') ? 'true' : 'false');
+        
+                // Check that Email exists in the data object before using it
+                if (data.Email) {
+                    localStorage.setItem('userEmail', data.Email);
+        
+                    if (data.Email.includes('@admin.tradewise.com')) {
+                        localStorage.setItem('isAdmin', 'true');
+                    } else {
+                        localStorage.setItem('isAdmin', 'false');
+                    }
+                } else {
+                    console.error('Email not provided in the response.');
+                }
+                
                 // Redirect to home.html after successful login
                 window.location.href = 'home.html';
             } else {
@@ -72,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => {
             console.error('Error:', error);
             alert('An error occurred during login. Please check your internet connection and try again.');
-        
         });
     });
 });
