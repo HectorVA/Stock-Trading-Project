@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Check that Email exists in the data object before using it
                 if (data.Email) {
                     localStorage.setItem('userEmail', data.Email);
-                    localStorage.setItem('userName', userName);
+                    localStorage.setItem('userName', data.Username);
         
                     if (data.Email.includes('@admin.tradewise.com')) {
                         localStorage.setItem('isAdmin', 'true');
