@@ -35,30 +35,35 @@ function updateTotal(amount, transactionType) {
     });
 }
 
-function fetchBalance() {
-    const userName = localStorage.getItem('userName');
+const userName = localStorage.getItem('userName');
 
-    if (userName) {
-        fetch('http://52.53.164.57:3000/balance')
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Update the displayed total with the fetched balance
-                const totalAmountDiv = document.getElementById('totalAmount');
-                const totalAmount = data.balance;
-                totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
-            } else {
-                alert('Failed to fetch balance');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while fetching the balance.');
-        });
-    } else {
-        console.error('UserName not found in localStorage');
-    }
+if (userName) {
+    // Note: No need to set headers or body for a GET request
+    fetch(`http://52.53.164.57:3000/balance?userName=${encodeURIComponent(userName)}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Update the displayed total with the fetched balance
+            const totalAmountDiv = document.getElementById('totalAmount');
+            const totalAmount = data.balance;
+            totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
+        } else {
+            alert('Failed to fetch balance: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while fetching the balance.');
+    });
+} else {
+    console.error('UserName not found in localStorage');
 }
+
 
 
 document.addEventListener('DOMContentLoaded', function () {
