@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('Is admin:', isAdmin); 
     document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
 
+    fetchStocks(); // Initial fetch
+    setInterval(fetchStocks, 10000);        
+
     // event listeners for form inputs
     buySellForm.addEventListener('input', function () {
         // Check if all inputs have values
@@ -39,4 +42,29 @@ function logout() {
     localStorage.removeItem('isAdmin');
     // Redirect to index.html
     window.location.href = 'index.html';
+}
+
+function fetchStocks() {
+    fetch('http://52.53.164.57:3000/stocks')
+        .then(response => response.json())
+        .then(stocks => {
+            updateStockDisplay(stocks);
+        })
+        .catch(error => console.error('Error fetching stocks:', error));
+}
+
+function updateStockDisplay(stocks) {
+    const stockInfoDiv = document.querySelector('.stock-info');
+    stockInfoDiv.innerHTML = ''; // Clear existing content
+    stocks.forEach(stock => {
+        const stockDiv = document.createElement('div');
+        stockDiv.classList.add('stock');
+        stockDiv.innerHTML = `
+            <h3>Stock Ticker: ${stock.Symbol}</h3>
+            <p>Price: $${stock.Price_Per_Share}</p>
+            <p>Volume: ${stock.Available_Shares}</p>
+            <!-- More details here -->
+        `;
+        stockInfoDiv.appendChild(stockDiv);
+    });
 }
