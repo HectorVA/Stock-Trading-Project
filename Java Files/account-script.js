@@ -39,21 +39,11 @@ function fetchBalance() {
     const userName = localStorage.getItem('userName');
 
     if (userName) {
-        fetch('http://52.53.164.57:3000/balance', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ userName: userName })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
+        fetch(`/balance?userName=${encodeURIComponent(userName)}`)
+        .then(response => response.json())
         .then(data => {
             if (data.success) {
+                // Update the displayed total with the fetched balance
                 const totalAmountDiv = document.getElementById('totalAmount');
                 const totalAmount = data.balance;
                 totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
@@ -67,7 +57,6 @@ function fetchBalance() {
         });
     } else {
         console.error('UserName not found in localStorage');
-        // Optionally handle the user not being logged in, e.g., redirect to login page
     }
 }
 
