@@ -39,7 +39,7 @@ function fetchBalance() {
     const userName = localStorage.getItem('userName');
 
     if (userName) {
-        fetch('http://52.53.164.57:3000/balance'
+        fetch('http://52.53.164.57:3000/balance',)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -54,7 +54,7 @@ function fetchBalance() {
         .catch(error => {
             console.error('Error:', error);
             alert('An error occurred while fetching the balance.');
-        }));
+        });
     } else {
         console.error('UserName not found in localStorage');
     }
