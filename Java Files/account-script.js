@@ -121,7 +121,6 @@ document.addEventListener('DOMContentLoaded', function () {
         totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
     }
 
-    fetchBalance();
 });
 
 function logout() {
