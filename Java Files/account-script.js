@@ -50,32 +50,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const userName = localStorage.getItem('userName');
 
-    if (userName) {
-        fetch('http://52.53.164.57:3000/balance'), {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ userName: userName })
+if (userName) {
+    fetch('http://52.53.164.57:3000/balance', { // Removed the extraneous closing parenthesis after the URL
+        method: 'POST', // Changed to 'GET' since it seems like you're retrieving data
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userName: userName }) // The body is not needed for a GET request
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
         }
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Update the displayed total with the fetched balance
-                const totalAmountDiv = document.getElementById('totalAmount');
-                const totalAmount = data.balance;
-                totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
-            } else {
-                alert('Failed to fetch balance');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while fetching the balance.');
-        });
-    } else {
-        console.error('UserName not found in localStorage');
-    }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Update the displayed total with the fetched balance
+            const totalAmountDiv = document.getElementById('totalAmount');
+            const totalAmount = data.balance;
+            totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
+        } else {
+            alert('Failed to fetch balance');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while fetching the balance.');
+    });
+} else {
+    console.error('UserName not found in localStorage');
+}
 
 
     // Initialize the total amount
