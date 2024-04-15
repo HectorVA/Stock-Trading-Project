@@ -79,3 +79,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
 });
+
+function logout() {
+    // Clear all relevant data from localStorage
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('isAdmin');
+    // Redirect to index.html
+    window.location.href = 'index.html';
+}

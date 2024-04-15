@@ -54,3 +54,12 @@ document.addEventListener('DOMContentLoaded', function () {
         totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
     }
 });
+
+function logout() {
+    // Clear all relevant data from localStorage
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('isAdmin');
+    // Redirect to index.html
+    window.location.href = 'index.html';
+}
