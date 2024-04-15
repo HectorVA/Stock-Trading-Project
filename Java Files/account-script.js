@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var portfolioSection = document.querySelector('.container.account-section .account-function .portfolio');
     var totalAmountDiv = document.getElementById('totalAmount');
 
+    // Check if the stored user email indicates an admin user
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    console.log('Is admin:', isAdmin); 
+    document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
+
     // Initialize the total amount
     var totalAmount = 0;
 

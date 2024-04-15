@@ -11,6 +11,11 @@ document.addEventListener('DOMContentLoaded', function () {
         var userName = document.getElementById('userName').value;
         var email = document.getElementById('email').value;
         var password = document.getElementById('password').value;
+        
+        // Check if the stored user email indicates an admin user
+        const isAdmin = localStorage.getItem('isAdmin') === 'true';
+        console.log('Is admin:', isAdmin); 
+        document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
 
         fetch('http://52.53.164.57:3000/create-account', {
             method: 'POST',
