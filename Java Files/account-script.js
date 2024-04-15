@@ -35,6 +35,41 @@ function updateTotal(amount, transactionType) {
     });
 }
 
+function fetchBalance() {
+    const userName = localStorage.getItem('userName');
+
+    if (userName) {
+        fetch('http://52.53.164.57:3000/balance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userName: userName })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                const totalAmountDiv = document.getElementById('totalAmount');
+                const totalAmount = data.balance;
+                totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
+            } else {
+                alert('Failed to fetch balance');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while fetching the balance.');
+        });
+    } else {
+        console.error('UserName not found in localStorage');
+        // Optionally handle the user not being logged in, e.g., redirect to login page
+    }
+}
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -47,41 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
     console.log('Is admin:', isAdmin); 
     document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
-
-    const userName = localStorage.getItem('userName');
-
-if (userName) {
-    fetch('http://52.53.164.57:3000/balance', { // Removed the extraneous closing parenthesis after the URL
-        method: 'POST', // Changed to 'GET' since it seems like you're retrieving data
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ userName: userName }) // The body is not needed for a GET request
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            // Update the displayed total with the fetched balance
-            const totalAmountDiv = document.getElementById('totalAmount');
-            const totalAmount = data.balance;
-            totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
-        } else {
-            alert('Failed to fetch balance');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while fetching the balance.');
-    });
-} else {
-    console.error('UserName not found in localStorage');
-}
-
 
     // Initialize the total amount
     var totalAmount = 0;
@@ -126,6 +126,8 @@ if (userName) {
         totalAmount += amount;
         totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
     }
+
+    fetchBalance();
 });
 
 function logout() {
