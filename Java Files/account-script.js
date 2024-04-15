@@ -51,13 +51,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const userName = localStorage.getItem('userName');
 
     if (userName) {
-        fetch('http://52.53.164.57:3000/balance', {
+        fetch('http://52.53.164.57:3000/balance'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ userName: userName })
-        })
+        }
         .then(response => response.json())
         .then(data => {
             if (data.success) {
