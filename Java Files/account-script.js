@@ -1,4 +1,42 @@
 // account-script.js
+function updateTotal(amount, transactionType) {
+    // Use the userName from localStorage to identify the user
+    const userName = localStorage.getItem('userName');
+
+    // Set up the request body
+    const requestBody = {
+        userName: userName,
+        amount: amount,
+        transactionType: transactionType
+    };
+
+    // Send the deposit or withdrawal to the server
+    fetch('http://52.53.164.57:3000/transaction', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            // If the transaction is successful, update the displayed total
+            totalAmount = data.newBalance; // Assuming the server sends back the new balance
+            totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
+        } else {
+            // Handle any errors, such as transaction failing due to insufficient funds
+            alert('Transaction failed: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while processing the transaction.');
+    });
+}
+
+
+
 document.addEventListener('DOMContentLoaded', function () {
     var depositForm = document.getElementById('depositForm');
     var withdrawForm = document.getElementById('withdrawForm');
@@ -9,6 +47,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
     console.log('Is admin:', isAdmin); 
     document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
+
+    const userName = localStorage.getItem('userName');
+
+    // Fetch the current balance from the server
+    fetch(`http://52.53.164.57:3000/balance?userName=${encodeURIComponent(userName)}`)
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            // Update the displayed total with the fetched balance
+            totalAmount = data.balance;
+            totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
+        } else {
+            alert('Failed to fetch balance');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while fetching the balance.');
+    });
 
     // Initialize the total amount
     var totalAmount = 0;
