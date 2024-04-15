@@ -22,6 +22,7 @@ function fetchStocks() {
     }
 }
 
+
 function updateStockDisplay(stocks) {
     const stockInfoDiv = document.querySelector('.stock-info');
     stockInfoDiv.innerHTML = ''; // Clear existing content
