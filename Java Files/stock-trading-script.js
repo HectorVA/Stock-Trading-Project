@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (localStorage.getItem('userEmail')) {
         fetchStocks(); // Fetch stocks once initially
-        setInterval(fetchStocks, 10000); // Set up the interval to fetch stocks
+        setInterval(fetchStocks, 5000); // Set up the interval to fetch stocks
     } else {
         logout(); // Not logged in, so log the user out
     }      
