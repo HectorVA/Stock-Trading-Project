@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var transactionTypeInput = document.getElementById('transactionType');
     var submitButton = document.getElementById('submitButton');
 
+    // Check if the stored user email indicates an admin user
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    console.log('Is admin:', isAdmin); 
+    document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
+
     // event listeners for form inputs
     buySellForm.addEventListener('input', function () {
         // Check if all inputs have values
