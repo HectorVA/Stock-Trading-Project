@@ -60,13 +60,17 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 alert('Logged in successfully!');
+
+                //Save email to localStorage or session storage
+                localStorage.setItem('userEmail', data.Email);
     
                 // Check if the user's email contains '@admin.tradewise.com'
-                var userEmail = data.email; // Assuming 'email' is the field returned by the server
+                var userEmail = data.Email; // Assuming 'email' is the field returned by the server
                 if (userEmail.includes('@admin.tradewise.com')) {
-                    document.getElementById('adminLink').style.display = 'block';
+                    localStorage.setItem('isAdmin', 'true');
+                } else {
+                    localStorage.setItem('isAdmin', 'false');
                 }
-    
                 // Redirect to home.html after successful login
                 var redirectUrl = 'home.html?username=' + encodeURIComponent(userName);
                 window.location.href = redirectUrl;
