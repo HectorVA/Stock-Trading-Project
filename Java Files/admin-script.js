@@ -6,10 +6,19 @@ function toggleMenu() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+
+    
+    // Check if the stored user email indicates an admin user
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    console.log('Is admin:', isAdmin); 
+    document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
+
     var createStockForm = document.querySelector('.container.admin-section .admin-function:nth-child(1) form');
     var changeMarketHoursForm = document.querySelector('.container.admin-section .admin-function:nth-child(2) form');
     var changeMarketScheduleForm = document.querySelector('.container.admin-section .admin-function:nth-child(3) form');
 
+    
+    
     createStockForm.addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent default form submission
 
