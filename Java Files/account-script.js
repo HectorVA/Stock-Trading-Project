@@ -50,22 +50,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const userName = localStorage.getItem('userName');
 
-    // Fetch the current balance from the server
+if (userName) {
     fetch(`http://52.53.164.57:3000/balance?userName=${encodeURIComponent(userName)}`)
-    .then(response => response.json())
-    .then(data => {
-        if(data.success) {
-            // Update the displayed total with the fetched balance
-            totalAmount = data.balance;
-            totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
-        } else {
-            alert('Failed to fetch balance');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while fetching the balance.');
-    });
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                // Update the displayed total with the fetched balance
+                const totalAmountDiv = document.getElementById('totalAmount');
+                const totalAmount = data.balance;
+                totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
+            } else {
+                alert('Failed to fetch balance');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while fetching the balance.');
+        });
+} else {
+    console.error('UserName not found in localStorage');
+}
 
     // Initialize the total amount
     var totalAmount = 0;
