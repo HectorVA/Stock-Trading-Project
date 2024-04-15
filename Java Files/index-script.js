@@ -60,20 +60,9 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 alert('Logged in successfully!');
-                localStorage.setItem('userName', data.userName);
-                // Check that Email exists in the data object before using it
-                if (data.Email) {
-                    localStorage.setItem('userEmail', data.Email);
+                localStorage.setItem('userName', data.username); // Use the username key as provided by the server
+                localStorage.setItem('userEmail', data.email); // Use the email key as provided by the server
         
-                    if (data.Email.includes('@admin.tradewise.com')) {
-                        localStorage.setItem('isAdmin', 'true');
-                    } else {
-                        localStorage.setItem('isAdmin', 'false');
-                    }
-                } else {
-                    console.error('Email not provided in the response.');
-                }
-                
                 // Redirect to home.html after successful login
                 window.location.href = 'home.html';
             } else {
