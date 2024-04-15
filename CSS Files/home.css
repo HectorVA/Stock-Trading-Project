@@ -34,6 +34,20 @@ nav ul {
     justify-content: center;
 }
 
+.logout-button {
+    background-color: #b36e00;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Added for hover effect */
+}
+
+.logout-button:hover {
+    background-color: #4F759B;
+}
+
 nav li {
     margin-right: 10px;
 }

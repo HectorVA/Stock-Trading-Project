@@ -61,20 +61,10 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(data);
             if (data.success) {
                 alert('Logged in successfully!');
-
-                //Save email to localStorage or session storage
                 localStorage.setItem('userEmail', data.Email);
-    
-                // Check if the user's email contains '@admin.tradewise.com'
-                var userEmail = data.Email; // Assuming 'email' is the field returned by the server
-                if (userEmail.includes('@admin.tradewise.com')) {
-                    localStorage.setItem('isAdmin', 'true');
-                } else {
-                    localStorage.setItem('isAdmin', 'false');
-                }
+                localStorage.setItem('isAdmin', data.Email.includes('@admin.tradewise.com') ? 'true' : 'false');
                 // Redirect to home.html after successful login
-                var redirectUrl = 'home.html?username=' + encodeURIComponent(userName);
-                window.location.href = redirectUrl;
+                window.location.href = 'home.html';
             } else {
                 alert('Login failed: ' + data.message);
             }
