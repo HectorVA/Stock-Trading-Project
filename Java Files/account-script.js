@@ -49,33 +49,33 @@ function updateTotal(amount, transactionType, userName) {
         alert('An error occurred while processing the transaction.');
     });
 }
-const userName = localStorage.getItem('userName');
-
-if (userName) {
-    // Note: No need to set headers or body for a GET request
-    fetch(`http://54.176.181.88:3000/balance?userName=${encodeURIComponent(userName)}`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            // Update the displayed total with the fetched balance
-            const totalAmountDiv = document.getElementById('totalAmount');
-            const totalAmount = data.balance;
-            totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
-        } else {
-            alert('Failed to fetch balance: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while fetching the balance.');
-    });
-} else {
-    console.error('UserName not found in localStorage');
+// Define a function to initialize the balance
+function initializeBalance() {
+    const userName = localStorage.getItem('userName');
+    if (userName) {
+        fetch(`http://54.176.181.88:3000/balance?userName=${encodeURIComponent(userName)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Update the displayed total with the fetched balance
+                updateTotalFromServer(data.balance);
+            } else {
+                alert('Failed to fetch balance: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while fetching the balance.');
+        });
+    } else {
+        console.error('UserName not found in localStorage');
+        // Redirect to login page or show appropriate message
+    }
 }
 
 
@@ -86,6 +86,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var portfolioSection = document.querySelector('.container.account-section .account-function .portfolio');
     var totalAmountDiv = document.getElementById('totalAmount');
 
+    initializeBalance();
+    
     // Check if the stored user email indicates an admin user
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
     console.log('Is admin:', isAdmin); 
