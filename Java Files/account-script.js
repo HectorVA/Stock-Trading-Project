@@ -11,21 +11,24 @@ function updateTotal(amount, transactionType) {
     };
 
     // Send the deposit or withdrawal to the server
-    fetch('http://54.176.181.88:3000/transaction', {
+    fetch('http://52.53.164.57:3000/transaction', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify({
+            userName: userName,
+            amount: amount,
+            transactionType: transactionType
+        })
     })
     .then(response => response.json())
     .then(data => {
-        if(data.success) {
-            // If the transaction is successful, update the displayed total
-            totalAmount = data.newBalance; // Assuming the server sends back the new balance
-            totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
+        if (data.success) {
+            // Update the displayed total with the new balance returned from the server
+            updateDisplayedTotal(data.newBalance);
+            addTransactionToPortfolio(transactionType, amount);
         } else {
-            // Handle any errors, such as transaction failing due to insufficient funds
             alert('Transaction failed: ' + data.message);
         }
     })
@@ -33,7 +36,7 @@ function updateTotal(amount, transactionType) {
         console.error('Error:', error);
         alert('An error occurred while processing the transaction.');
     });
-}
+
 
 const userName = localStorage.getItem('userName');
 
@@ -64,70 +67,48 @@ if (userName) {
     console.error('UserName not found in localStorage');
 }
 
+// Function to add a transaction to the portfolio display
+function addTransactionToPortfolio(transactionType, amount) {
+    var transactionItem = document.createElement('div');
+    transactionItem.classList.add('transaction-item');
+    var date = new Date().toLocaleDateString();
+    transactionItem.innerHTML = `
+        <p>Date: ${date}</p>
+        <p>Transaction Type: ${transactionType}</p>
+        <p>Amount: $${amount.toFixed(2)}</p>
+    `;
+    portfolioSection.appendChild(transactionItem);
+}
 
-
+// DOM Content Loaded Event Listener
 document.addEventListener('DOMContentLoaded', function () {
-    var depositForm = document.getElementById('depositForm');
-    var withdrawForm = document.getElementById('withdrawForm');
-    var portfolioSection = document.querySelector('.container.account-section .account-function .portfolio');
-    var totalAmountDiv = document.getElementById('totalAmount');
-
-    // Check if the stored user email indicates an admin user
+    portfolioSection = document.querySelector('.container.account-section .account-function .portfolio');
+    initializeBalance(); // Get initial balance from the server
+    
+    const depositForm = document.getElementById('depositForm');
+    const withdrawForm = document.getElementById('withdrawForm');
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
-    console.log('Is admin:', isAdmin); 
     document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
-
-    // Initialize the total amount
-    var totalAmount = 0;
-
+    
     depositForm.addEventListener('submit', function (event) {
         event.preventDefault();
-
         var depositAmount = parseFloat(document.getElementById('depositAmount').value);
-
-        updatePortfolio('Deposit', depositAmount);
-        updateTotal(depositAmount);
-
+        var userName = localStorage.getItem('userName');
+        updateTotalOnServer(depositAmount, 'deposit', userName);
         depositForm.reset();
     });
 
     withdrawForm.addEventListener('submit', function (event) {
         event.preventDefault();
-
         var withdrawAmount = parseFloat(document.getElementById('withdrawAmount').value);
-
-        updatePortfolio('Withdraw', withdrawAmount);
-        updateTotal(-withdrawAmount);
-
+        var userName = localStorage.getItem('userName');
+        updateTotalOnServer(withdrawAmount, 'withdraw', userName);
         withdrawForm.reset();
     });
-
-    function updatePortfolio(transactionType, amount) {
-        var transactionItem = document.createElement('div');
-        transactionItem.classList.add('transaction-item');
-
-        var date = new Date().toLocaleDateString();
-        transactionItem.innerHTML = `
-            <p>Date: ${date}</p>
-            <p>Transaction Type: ${transactionType}</p>
-            <p>Amount: $${amount.toFixed(2)}</p>
-        `;
-
-        portfolioSection.appendChild(transactionItem);
-    }
-
-    function updateTotal(amount) {
-        totalAmount += amount;
-        totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
-    }
-
 });
 
+// Logout Function
 function logout() {
-    // Clear all relevant data from localStorage
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('isAdmin');
-    // Redirect to index.html
-    window.location.href = 'index.html';
+    localStorage.clear(); // Clears all local storage data
+    window.location.href = 'index.html'; // Redirects to the login page
 }
