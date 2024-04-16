@@ -1,11 +1,13 @@
 // account-script.js
 let portfolioSection;
 
-// Helper function to update the displayed total balance
 function updateDisplayedTotal(newBalance) {
     const totalAmountDiv = document.getElementById('totalAmount');
-    if (totalAmountDiv) {
-        totalAmountDiv.textContent = `${newBalance.toFixed(2)}`;
+    if (totalAmountDiv && !isNaN(newBalance)) {
+        const formattedBalance = parseFloat(newBalance).toFixed(2);
+        totalAmountDiv.textContent = formattedBalance;
+    } else {
+        console.error('Invalid balance value:', newBalance);
     }
 }
 
