@@ -90,42 +90,34 @@ document.addEventListener('DOMContentLoaded', function () {
         logout(); // Not logged in, so log the user out
     }      
 
-    // event listeners for form inputs
     buySellForm.addEventListener('input', function () {
-        // Check if all inputs have values
         var allInputsFilled = stockSymbolInput.value.trim() !== '' &&
                               quantityInput.value.trim() !== '' &&
                               transactionTypeInput.value.trim() !== '';
-
-        //  submit button based on input values
         submitButton.disabled = !allInputsFilled;
     });
 
-    //  reset the form after submission
-    buySellForm.addEventListener('submit', function () {
-        // Reset form fields
-        stockSymbolInput.value = '';
-        quantityInput.value = '';
-        transactionTypeInput.value = 'buy'; // Reset to default value
-        submitButton.disabled = true; // Disable button again after submission
-    });
-
-
     buySellForm.addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent the form from submitting the traditional way
+        event.preventDefault();
 
-        const userName = localStorage.getItem('userName'); // Assume userName is stored in localStorage
-        const stockSymbol = document.getElementById('stockSymbol').value;
-        const quantity = parseInt(document.getElementById('quantity').value, 10);
-        const transactionType = document.getElementById('transactionType').value;
+        const userName = localStorage.getItem('userName');
+        const stockSymbol = stockSymbolInput.value;
+        const quantity = parseInt(quantityInput.value, 10);
+        const transactionType = transactionTypeInput.value;
 
-        // Only proceed if transactionType is 'buy'; adjust accordingly for 'sell'
+        // Disable the submit button to prevent multiple submissions
+        submitButton.disabled = true;
+
         if (transactionType === 'buy') {
             buyStock(userName, stockSymbol, quantity);
-        } else {
-            // Handle sell operation if needed
-            console.log('Sell operation not implemented yet');
+        } else if (transactionType === 'sell') {
+            sellStock(userName, stockSymbol, quantity);
         }
+
+        // Reset form fields after the operation
+        stockSymbolInput.value = '';
+        quantityInput.value = '';
+        transactionTypeInput.value = 'buy';
     });
 });
 
