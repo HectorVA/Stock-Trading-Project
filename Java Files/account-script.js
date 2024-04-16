@@ -1,17 +1,17 @@
 // account-script.js
-function updateTotal(amount, transactionType) {
-    // Use the userName from localStorage to identify the user
-    const userName = localStorage.getItem('userName');
+let portfolioSection;
 
-    // Set up the request body
-    const requestBody = {
-        userName: userName,
-        amount: amount,
-        transactionType: transactionType
-    };};
+// Helper function to update the displayed total balance
+function updateDisplayedTotal(newBalance) {
+    const totalAmountDiv = document.getElementById('totalAmount');
+    if (totalAmountDiv) {
+        totalAmountDiv.textContent = `$${newBalance.toFixed(2)}`;
+    }
+}
 
-    // Send the deposit or withdrawal to the server
-    fetch('http://52.53.164.57:3000/transaction', {
+ // Function to update the total on the server
+function updateTotalOnServer(amount, transactionType, userName) {
+    fetch('http://54.176.181.88:3000/transaction', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -25,8 +25,8 @@ function updateTotal(amount, transactionType) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Update the displayed total with the new balance returned from the server
-            updateDisplayedTotal(data.newBalance);
+            // Assuming the server returns the new balance
+            updateDisplayedTotal(data.balance);
             addTransactionToPortfolio(transactionType, amount);
         } else {
             alert('Transaction failed: ' + data.message);
@@ -36,35 +36,29 @@ function updateTotal(amount, transactionType) {
         console.error('Error:', error);
         alert('An error occurred while processing the transaction.');
     });
+}
 
+// Function to fetch the initial balance and display it
+function initializeBalance() {
+    const userName = localStorage.getItem('userName');
 
-const userName = localStorage.getItem('userName');
-
-if (userName) {
-    // Note: No need to set headers or body for a GET request
-    fetch(`http://54.176.181.88:3000/balance?userName=${encodeURIComponent(userName)}`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            // Update the displayed total with the fetched balance
-            const totalAmountDiv = document.getElementById('totalAmount');
-            const totalAmount = data.balance;
-            totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
-        } else {
-            alert('Failed to fetch balance: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while fetching the balance.');
-    });
-} else {
-    console.error('UserName not found in localStorage');
+    if (userName) {
+        fetch(`http://54.176.181.88:3000/balance?userName=${encodeURIComponent(userName)}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateDisplayedTotal(data.balance);
+            } else {
+                alert('Failed to fetch balance: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while fetching the balance.');
+        });
+    } else {
+        console.error('UserName not found in localStorage');
+    }
 }
 
 // Function to add a transaction to the portfolio display
@@ -85,24 +79,26 @@ document.addEventListener('DOMContentLoaded', function () {
     portfolioSection = document.querySelector('.container.account-section .account-function .portfolio');
     initializeBalance(); // Get initial balance from the server
     
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    const adminLink = document.getElementById('adminLink');
+    if (adminLink) {
+        adminLink.style.display = isAdmin ? 'block' : 'none';
+    }
+
     const depositForm = document.getElementById('depositForm');
     const withdrawForm = document.getElementById('withdrawForm');
-    const isAdmin = localStorage.getItem('isAdmin') === 'true';
-    document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
     
     depositForm.addEventListener('submit', function (event) {
         event.preventDefault();
         var depositAmount = parseFloat(document.getElementById('depositAmount').value);
-        var userName = localStorage.getItem('userName');
-        updateTotalOnServer(depositAmount, 'deposit', userName);
+        updateTotalOnServer(depositAmount, 'deposit', localStorage.getItem('userName'));
         depositForm.reset();
     });
 
     withdrawForm.addEventListener('submit', function (event) {
         event.preventDefault();
         var withdrawAmount = parseFloat(document.getElementById('withdrawAmount').value);
-        var userName = localStorage.getItem('userName');
-        updateTotalOnServer(withdrawAmount, 'withdraw', userName);
+        updateTotalOnServer(withdrawAmount, 'withdraw', localStorage.getItem('userName'));
         withdrawForm.reset();
     });
 });
