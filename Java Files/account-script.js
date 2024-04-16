@@ -1,6 +1,12 @@
 // account-script.js
 const totalAmountDiv = document.getElementById('totalAmount');
 let totalAmount = 0; // This also needs to be in the wider scope if other functions will access it
+let portfolioSection;
+
+function updateDisplayedTotal(newBalance) {
+    totalAmount = newBalance; // Update the global total amount
+    totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`; // Update the display
+}
 
 function updateTotalFromServer(newBalance) {
     totalAmount = newBalance; // Assuming the server sends back the new balance
@@ -25,7 +31,7 @@ withdrawForm.addEventListener('submit', function (event) {
     updateTotal(withdrawAmount, 'withdraw', userName);
 });
 
-function updateTotal(amount, transactionType, userName) {
+function updateTotalOnServer(amount, transactionType, userName) {
     fetch('http://54.176.181.88:3000/transaction', {
         method: 'POST',
         headers: {
@@ -105,41 +111,37 @@ function updateTotal(amount) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    var depositForm = document.getElementById('depositForm');
-    var withdrawForm = document.getElementById('withdrawForm');
-    var portfolioSection = document.querySelector('.container.account-section .account-function .portfolio');
-    var totalAmountDiv = document.getElementById('totalAmount');
+    // Define the sections of the portfolio and total amount once the DOM is fully loaded
+    portfolioSection = document.querySelector('.container.account-section .account-function .portfolio');
+    totalAmountDiv = document.getElementById('totalAmount');
 
+    // Initialize the total amount with the value from the server
     initializeBalance();
 
-    // Check if the stored user email indicates an admin user
+    // Reference to form elements
+    var depositForm = document.getElementById('depositForm');
+    var withdrawForm = document.getElementById('withdrawForm');
+
+    // Check admin status
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
-    console.log('Is admin:', isAdmin); 
     document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
 
-    // Initialize the total amount
-    var totalAmount = 0;
-
+    // Event listener for deposit form submission
     depositForm.addEventListener('submit', function (event) {
         event.preventDefault();
-
         var depositAmount = parseFloat(document.getElementById('depositAmount').value);
-
-        updatePortfolio('Deposit', depositAmount);
-        updateTotal(depositAmount);
-
-        depositForm.reset();
+        var userName = localStorage.getItem('userName');
+        updateTotalOnServer(depositAmount, 'deposit', userName); // This function sends the deposit to the server
+        depositForm.reset(); // Reset the form after submitting
     });
 
+    // Event listener for withdraw form submission
     withdrawForm.addEventListener('submit', function (event) {
         event.preventDefault();
-
         var withdrawAmount = parseFloat(document.getElementById('withdrawAmount').value);
-
-        updatePortfolio('Withdraw', withdrawAmount);
-        updateTotal(-withdrawAmount);
-
-        withdrawForm.reset();
+        var userName = localStorage.getItem('userName');
+        updateTotalOnServer(withdrawAmount, 'withdraw', userName); // This function sends the withdrawal to the server
+        withdrawForm.reset(); // Reset the form after submitting
     });
 
 });
