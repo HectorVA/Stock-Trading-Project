@@ -77,7 +77,54 @@ document.addEventListener('DOMContentLoaded', function () {
         transactionTypeInput.value = 'buy'; // Reset to default value
         submitButton.disabled = true; // Disable button again after submission
     });
+
+    const buySellForm = document.getElementById('buySellForm');
+
+    buySellForm.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the form from submitting the traditional way
+
+        const userName = localStorage.getItem('userName'); // Assume userName is stored in localStorage
+        const stockSymbol = document.getElementById('stockSymbol').value;
+        const quantity = parseInt(document.getElementById('quantity').value, 10);
+        const transactionType = document.getElementById('transactionType').value;
+
+        // Only proceed if transactionType is 'buy'; adjust accordingly for 'sell'
+        if (transactionType === 'buy') {
+            buyStock(userName, stockSymbol, quantity);
+        } else {
+            // Handle sell operation if needed
+            console.log('Sell operation not implemented yet');
+        }
+    });
 });
+
+function buyStock(userName, stockSymbol, quantity) {
+    fetch('http://54.176.181.88:3000/buy-stock', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: userName,
+            symbol: stockSymbol,
+            quantity: quantity
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Stock purchased successfully!');
+            fetchStocks(); // Re-fetch stocks to update the display
+        } else {
+            alert('Failed to purchase stock: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error purchasing stock:', error);
+        alert('An error occurred while purchasing the stock.');
+    });
+
+};
 
 
 
