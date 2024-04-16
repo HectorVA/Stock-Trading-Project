@@ -83,14 +83,17 @@ nav a:hover {
 .centered-content {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start; /* Changed from space-between to flex-start */
+    margin-top: 10px;
+    width: 100%;
 }
 
 .stock-info,
 .buy-sell-form {
-    width: calc(50% - 20px); /* Adjust the width to create a 2-column layout */
+    flex: 1 1 45%; /* Allows flexibility and takes up to 45% of the container width */
     box-sizing: border-box;
-    margin: 0 10px 20px 10px; /* Adjust margins for spacing between sections */
+    margin: 0 10px 20px 10px; /* Adjust margins for spacing */
+    /* Remove the calc(50% - 20px) and let flexbox handle the sizing */
 }
 
 .stock-info h2,
@@ -165,15 +168,19 @@ footer {
 
 
 @media (max-width: 992px) {
-    nav li {
-        margin-right: 5px;
+    .stock-info,
+    .buy-sell-form {
+        flex: 1 1 100%; /* Each element takes full width on smaller screens */
+        margin: 10px 0; /* Adjust margin to only top and bottom */
     }
 }
 
 
 @media (max-width: 576px) {
-    nav a {
-        padding: 8px;
-        margin: 2px;
+    .buy-sell-form label,
+    .buy-sell-form input,
+    .buy-sell-form select,
+    .buy-sell-form button {
+        width: 100%; /* Ensure form elements take full width */
     }
 }
