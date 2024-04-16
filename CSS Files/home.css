@@ -35,13 +35,14 @@ nav ul {
 }
 
 .logout-button {
-    background-color: #b36e00;
+    text-decoration: none;
     color: #fff;
-    padding: 8px 15px;
-    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #b36e00;
+    border: 1px solid #004080;
     border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease; /* Added for hover effect */
+    transition: background-color 0.3s ease;
 }
 
 .logout-button:hover {
