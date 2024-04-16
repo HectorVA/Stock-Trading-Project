@@ -71,6 +71,34 @@ function buyStock(userName, stockSymbol, quantity) {
     });
 }
 
+function sellStock(userName, stockSymbol, quantity) {
+    fetch('http://54.176.181.88:3000/sell-stock', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: userName,
+            symbol: stockSymbol,
+            quantity: quantity
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Stock sold successfully!');
+            // Optionally, refresh the stock list or update user's balance display
+            fetchStocks(); 
+        } else {
+            alert('Failed to sell stock: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error selling stock:', error);
+        alert('An error occurred while selling the stock.');
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var buySellForm = document.getElementById('buySellForm');
     var stockSymbolInput = document.getElementById('stockSymbol');
