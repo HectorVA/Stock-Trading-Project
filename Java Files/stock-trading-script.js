@@ -11,7 +11,7 @@ function logout() {
 function fetchStocks() {
     const userEmail = localStorage.getItem('userEmail');
     if (userEmail) {
-        fetch('http://52.53.164.57:3000/stocks')
+        fetch('http://54.176.181.88:3000/stocks')
             .then(response => response.json())
             .then(stocks => {
                 updateStockDisplay(stocks);

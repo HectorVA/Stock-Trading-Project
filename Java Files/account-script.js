@@ -11,7 +11,7 @@ function updateTotal(amount, transactionType) {
     };
 
     // Send the deposit or withdrawal to the server
-    fetch('http://52.53.164.57:3000/transaction', {
+    fetch('http://54.176.181.88:3000/transaction', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ const userName = localStorage.getItem('userName');
 
 if (userName) {
     // Note: No need to set headers or body for a GET request
-    fetch(`http://52.53.164.57:3000/balance?userName=${encodeURIComponent(userName)}`)
+    fetch(`http://54.176.181.88/balance?userName=${encodeURIComponent(userName)}`)
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok: ' + response.statusText);
