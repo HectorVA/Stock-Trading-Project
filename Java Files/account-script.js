@@ -1,4 +1,7 @@
 // account-script.js
+const totalAmountDiv = document.getElementById('totalAmount');
+let totalAmount = 0; // This also needs to be in the wider scope if other functions will access it
+
 function updateTotalFromServer(newBalance) {
     totalAmount = newBalance; // Assuming the server sends back the new balance
     totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
@@ -87,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var totalAmountDiv = document.getElementById('totalAmount');
 
     initializeBalance();
-    
+
     // Check if the stored user email indicates an admin user
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
     console.log('Is admin:', isAdmin); 
