@@ -8,7 +8,7 @@ function updateTotal(amount, transactionType) {
         userName: userName,
         amount: amount,
         transactionType: transactionType
-    };
+    };};
 
     // Send the deposit or withdrawal to the server
     fetch('http://52.53.164.57:3000/transaction', {
@@ -111,4 +111,4 @@ document.addEventListener('DOMContentLoaded', function () {
 function logout() {
     localStorage.clear(); // Clears all local storage data
     window.location.href = 'index.html'; // Redirects to the login page
-}
+};
