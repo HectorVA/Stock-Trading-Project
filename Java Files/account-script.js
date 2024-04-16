@@ -1,31 +1,46 @@
 // account-script.js
-function updateTotal(amount, transactionType) {
-    // Use the userName from localStorage to identify the user
-    const userName = localStorage.getItem('userName');
+function updateTotalFromServer(newBalance) {
+    totalAmount = newBalance; // Assuming the server sends back the new balance
+    totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
+}
 
-    // Set up the request body
-    const requestBody = {
-        userName: userName,
-        amount: amount,
-        transactionType: transactionType
-    };
+// Update after deposit
+depositForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var depositAmount = parseFloat(document.getElementById('depositAmount').value);
+    // Assuming the userName is stored in localStorage
+    var userName = localStorage.getItem('userName');
+    updateTotal(depositAmount, 'deposit', userName);
+});
 
-    // Send the deposit or withdrawal to the server
+// Update after withdrawal
+withdrawForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var withdrawAmount = parseFloat(document.getElementById('withdrawAmount').value);
+    // Assuming the userName is stored in localStorage
+    var userName = localStorage.getItem('userName');
+    updateTotal(withdrawAmount, 'withdraw', userName);
+});
+
+function updateTotal(amount, transactionType, userName) {
     fetch('http://54.176.181.88:3000/transaction', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify({
+            userName: userName,
+            amount: amount,
+            transactionType: transactionType
+        })
     })
     .then(response => response.json())
     .then(data => {
         if(data.success) {
-            // If the transaction is successful, update the displayed total
-            totalAmount = data.newBalance; // Assuming the server sends back the new balance
-            totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
+            // Update the displayed total with the new balance returned from the server
+            updateTotalFromServer(data.newBalance);
+            updatePortfolio(transactionType, amount);
         } else {
-            // Handle any errors, such as transaction failing due to insufficient funds
             alert('Transaction failed: ' + data.message);
         }
     })
@@ -34,7 +49,6 @@ function updateTotal(amount, transactionType) {
         alert('An error occurred while processing the transaction.');
     });
 }
-
 const userName = localStorage.getItem('userName');
 
 if (userName) {
