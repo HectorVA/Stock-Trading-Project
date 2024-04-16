@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function () {
         submitButton.disabled = true; // Disable button again after submission
     });
 
-    const buySellForm = document.getElementById('buySellForm');
 
     buySellForm.addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent the form from submitting the traditional way
