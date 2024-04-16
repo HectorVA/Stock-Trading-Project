@@ -41,7 +41,7 @@
             const transactionItem = document.createElement('div');
             transactionItem.classList.add('transaction-item');
             transactionItem.innerHTML = `
-                <p>Date: ${transactionDate.toLocaleDateString()} ${transactionTime.toLocaleTimeString()}</p>
+                <p>Date: ${transactionDate.toLocaleDateString()}</p>
                 <p>Transaction Type: ${transaction.Transaction_Type}</p>
                 <p>Stock: ${transaction.Symbol}</p>
                 <p>Quantity: ${Math.abs(transaction.Quantity_Of_Shares)}</p>
