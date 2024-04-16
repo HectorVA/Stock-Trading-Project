@@ -34,15 +34,19 @@
         historyDiv.innerHTML = ''; // Clear any existing content
     
         transactions.forEach(transaction => {
+            // Convert the date and time to a JavaScript Date object
+            const transactionDate = new Date(transaction.Date);
+            const transactionTime = new Date(transaction.Date + 'T' + transaction.Time);
+    
             const transactionItem = document.createElement('div');
             transactionItem.classList.add('transaction-item');
             transactionItem.innerHTML = `
-                <p>Date: ${transaction.Date}</p>
+                <p>Date: ${transactionDate.toLocaleDateString()} ${transactionTime.toLocaleTimeString()}</p>
                 <p>Transaction Type: ${transaction.Transaction_Type}</p>
                 <p>Stock: ${transaction.Symbol}</p>
-                <p>Quantity: ${transaction.Quantity_Of_Shares}</p>
+                <p>Quantity: ${Math.abs(transaction.Quantity_Of_Shares)}</p>
                 <p>Price: $${transaction.Price_Per_Share.toFixed(2)}</p>
-                <p>Total: $${transaction.Transaction_Total.toFixed(2)}</p>
+                <p>Total: $${Math.abs(transaction.Transaction_Total).toFixed(2)}</p>
             `;
             historyDiv.appendChild(transactionItem);
         });
