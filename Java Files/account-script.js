@@ -5,7 +5,7 @@ let portfolioSection;
 function updateDisplayedTotal(newBalance) {
     const totalAmountDiv = document.getElementById('totalAmount');
     if (totalAmountDiv) {
-        totalAmountDiv.textContent = `$${newBalance.toFixed(2)}`;
+        totalAmountDiv.textContent = `${newBalance.toFixed(2)}`;
     }
 }
 
