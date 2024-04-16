@@ -81,7 +81,28 @@ function initializeBalance() {
     }
 }
 
+function updatePortfolio(transactionType, amount) {
+    var transactionItem = document.createElement('div');
+    transactionItem.classList.add('transaction-item');
 
+    var date = new Date().toLocaleDateString();
+    transactionItem.innerHTML = `
+        <p>Date: ${date}</p>
+        <p>Transaction Type: ${transactionType}</p>
+        <p>Amount: $${amount.toFixed(2)}</p>
+    `;
+
+    // Assuming portfolioSection is globally accessible
+    var portfolioSection = document.querySelector('.container.account-section .account-function .portfolio');
+    portfolioSection.appendChild(transactionItem);
+}
+
+function updateTotal(amount) {
+    // Assuming totalAmountDiv is globally accessible
+    var totalAmountDiv = document.getElementById('totalAmount');
+    totalAmount += amount;
+    totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     var depositForm = document.getElementById('depositForm');
@@ -120,25 +141,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         withdrawForm.reset();
     });
-
-    function updatePortfolio(transactionType, amount) {
-        var transactionItem = document.createElement('div');
-        transactionItem.classList.add('transaction-item');
-
-        var date = new Date().toLocaleDateString();
-        transactionItem.innerHTML = `
-            <p>Date: ${date}</p>
-            <p>Transaction Type: ${transactionType}</p>
-            <p>Amount: $${amount.toFixed(2)}</p>
-        `;
-
-        portfolioSection.appendChild(transactionItem);
-    }
-
-    function updateTotal(amount) {
-        totalAmount += amount;
-        totalAmountDiv.textContent = `$${totalAmount.toFixed(2)}`;
-    }
 
 });
 
