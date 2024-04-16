@@ -39,6 +39,38 @@ function updateStockDisplay(stocks) {
     });
 }
 
+function buyStock(userName, stockSymbol, quantity) {
+    fetch('http://54.176.181.88:3000/buy-stock', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: userName,
+            symbol: stockSymbol,
+            quantity: quantity
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            alert('Stock purchased successfully!');
+            fetchStocks(); // Re-fetch stocks to update the display
+        } else {
+            alert('Failed to purchase stock: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error purchasing stock:', error);
+        alert('An error occurred while purchasing the stock.');
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var buySellForm = document.getElementById('buySellForm');
     var stockSymbolInput = document.getElementById('stockSymbol');
@@ -97,33 +129,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-function buyStock(userName, stockSymbol, quantity) {
-    fetch('http://54.176.181.88:3000/buy-stock', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            username: userName,
-            symbol: stockSymbol,
-            quantity: quantity
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Stock purchased successfully!');
-            fetchStocks(); // Re-fetch stocks to update the display
-        } else {
-            alert('Failed to purchase stock: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error purchasing stock:', error);
-        alert('An error occurred while purchasing the stock.');
-    });
 
-};
+
 
 
 
