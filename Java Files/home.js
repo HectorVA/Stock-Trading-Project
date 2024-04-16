@@ -12,6 +12,34 @@ document.addEventListener('DOMContentLoaded', function () {
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
     console.log('Is admin:', isAdmin); 
     document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
+
+
+    if (username) {
+        // Fetch balance from the server using the /balance endpoint
+        fetch(`http://54.176.181.88:3000/balance?userName=${encodeURIComponent(username)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success && data.balance !== undefined) {
+                // Update the Purchasing Power element with the fetched balance
+                const purchasingPowerElement = document.getElementById('purchasingPower');
+                purchasingPowerElement.textContent = `$${data.balance.toFixed(2)}`;
+            } else {
+                console.error('Failed to fetch balance: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    } else {
+        console.error('Username not found in localStorage');
+        // Handle the case where there is no username in localStorage
+    }
+
 });
 
 function logout() {
