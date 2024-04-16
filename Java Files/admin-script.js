@@ -39,7 +39,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
     console.log('Is admin:', isAdmin); 
     document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
-
+ 
+     var createStockForm = document.querySelector('.container.admin-section .admin-function:nth-child(1) form');
+     // ... other form variables and event listeners ...
+ 
+     createStockForm.addEventListener('submit', function (event) {
+         event.preventDefault(); // Prevent default form submission
+ 
+         // Get form data
+         var companyName = document.getElementById('companyName').value;
+         var stockTicker = document.getElementById('stockTicker').value;
+         var volume = parseFloat(document.getElementById('volume').value);
+         var initialPrice = parseFloat(document.getElementById('initialPrice').value);
+ 
+         // Call the function to create a new stock
+         createNewStock(companyName, stockTicker, volume, initialPrice);
+ 
+         // Clear the form
+         createStockForm.reset();
+     });
 
 });
 
