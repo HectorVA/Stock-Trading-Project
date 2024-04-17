@@ -47,25 +47,42 @@ document.addEventListener('DOMContentLoaded', function () {
         // Handle the case where there is no username in localStorage
     }
 
-fetch(`http://54.176.181.88:3000/portfolio?userName=${encodeURIComponent(username)}`)
-.then(response => response.json())
-.then(data => {
-    if (data.success) {
-        // Use the data to display the portfolio and total stock value
-        const portfolioSection = document.querySelector('.portfolio ul');
-        portfolioSection.innerHTML = data.portfolio.map(stock => {
-            return `<li>${stock.symbol} - Quantity: ${stock.totalShares}, Value: ${formatter.format(stock.totalValue)}</li>`;
-        }).join('');
+    if (username) {
+        fetch(`http://54.176.181.88:3000/portfolio?userName=${encodeURIComponent(username)}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const portfolioSection = document.querySelector('.portfolio ul');
+                const formatter = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 2
+                });
 
-        const totalStockValueElement = document.querySelector('.balance p');
-        totalStockValueElement.textContent = `Total Stock Value: ${formatter.format(data.totalValue)}`;
+                // Clear any existing list items
+                portfolioSection.innerHTML = '';
+
+                // Generate and append new list items
+                data.portfolio.forEach(stock => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${stock.symbol} - Quantity: ${stock.totalShares}, Value: ${formatter.format(stock.totalValue)}`;
+                    portfolioSection.appendChild(listItem);
+                });
+
+                // Update the Total Stock Value in the Balance section
+                const totalStockValueElement = document.querySelector('.balance p');
+                totalStockValueElement.textContent = `Total Stock Value: ${formatter.format(data.totalValue)}`;
+            } else {
+                console.error('Failed to fetch portfolio: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching portfolio:', error);
+        });
     } else {
-        console.error('Failed to fetch portfolio: ' + data.message);
+        console.error('Username not found in localStorage');
+        // Redirect the user or handle the missing username as appropriate
     }
-})
-.catch(error => {
-    console.error('Error fetching portfolio:', error);
-});
 
 });
 
