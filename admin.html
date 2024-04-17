@@ -64,15 +64,18 @@
         <!-- Change Market Schedule Form -->
         <div class="admin-function">
             <h3>Change Market Schedule</h3>
-            <form id="changeMarketScheduleForm">
-                <label for="newMarketSchedule">New Market Schedule:</label>
-                <input type="text" id="newMarketSchedule" name="newMarketSchedule" required>
-
-                <button type="submit">Change Market Schedule</button>
-            </form>
+            <div>
+                <label for="holidayPicker">Set New Holiday:</label>
+                <input type="date" id="holidayPicker">
+            </div>
+            <button id="setHolidayBtn">Set Holiday</button>
+            <div>
+                <label for="upcomingHolidays">Upcoming Holidays:</label>
+                <select id="upcomingHolidays"></select>
+            </div>
+            <button id="removeHolidayBtn">Remove Holiday</button>
         </div>
     </div>
-
     <footer>
         <p>&copy; 2024 TradeWise. All rights reserved.</p>
     </footer>
