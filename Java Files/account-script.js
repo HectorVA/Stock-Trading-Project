@@ -4,13 +4,17 @@ let portfolioSection;
 function updateDisplayedTotal(newBalance) {
     const totalAmountDiv = document.getElementById('totalAmount');
     if (totalAmountDiv && !isNaN(newBalance)) {
-        const formattedBalance = parseFloat(newBalance).toFixed(2);
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2
+        });
+        const formattedBalance = formatter.format(newBalance);
         totalAmountDiv.textContent = formattedBalance;
     } else {
         console.error('Invalid balance value:', newBalance);
     }
 }
-
  // Function to update the total on the server
 function updateTotalOnServer(amount, transactionType, userName) {
     fetch('http://54.176.181.88:3000/transaction', {
