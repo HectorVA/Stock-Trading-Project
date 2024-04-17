@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const formattedBalance = formatter.format(data.balance);}
                 // Update the Purchasing Power element with the fetched balance
                 const purchasingPowerElement = document.getElementById('purchasingPower');
+                purchasingPowerElement.textContent = formattedBalance;
                 purchasingPowerElement.textContent = `$${data.balance.toFixed(2)}`;
             } else {
                 console.error('Failed to fetch balance: ' + data.message);
