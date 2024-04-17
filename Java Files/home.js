@@ -25,18 +25,16 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             if (data.success && data.balance !== undefined) {
-                if (data.success && data.balance !== undefined) {
-                    // Format the balance as a currency
-                    const formatter = new Intl.NumberFormat('en-US', {
-                        style: 'currency',
-                        currency: 'USD',
-                        minimumFractionDigits: 2
-                    });
-                    const formattedBalance = formatter.format(data.balance);}
-                // Update the Purchasing Power element with the fetched balance
+                // Format the balance as a currency
+                const formatter = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 2
+                });
+                const formattedBalance = formatter.format(data.balance);
+                // Update the Purchasing Power element with the formatted balance
                 const purchasingPowerElement = document.getElementById('purchasingPower');
                 purchasingPowerElement.textContent = formattedBalance;
-                purchasingPowerElement.textContent = `$${data.balance.toFixed(2)}`;
             } else {
                 console.error('Failed to fetch balance: ' + data.message);
             }
