@@ -18,7 +18,7 @@ function fetchStocks() {
             })
             .catch(error => console.error('Error fetching stocks:', error));
     } else {
-        logout(); // User is not logged in, so log them out
+        logout();
     }
 }
 
