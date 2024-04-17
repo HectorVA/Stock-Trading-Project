@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const userEmail = localStorage.getItem('userEmail');
     const username = localStorage.getItem('userName'); // Retrieve the username from localStorage
     const userNameElement = document.getElementById('userName');
+    const totalStockValueElement = document.getElementById('totalStockValue'); 
 
     // Set the display content to username if available, otherwise use email
     userNameElement.textContent = username || userEmail; 
