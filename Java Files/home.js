@@ -25,6 +25,14 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             if (data.success && data.balance !== undefined) {
+                if (data.success && data.balance !== undefined) {
+                    // Format the balance as a currency
+                    const formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        minimumFractionDigits: 2
+                    });
+                    const formattedBalance = formatter.format(data.balance);}
                 // Update the Purchasing Power element with the fetched balance
                 const purchasingPowerElement = document.getElementById('purchasingPower');
                 purchasingPowerElement.textContent = `$${data.balance.toFixed(2)}`;
