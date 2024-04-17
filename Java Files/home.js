@@ -7,7 +7,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const userNameElement = document.getElementById('userName');
     const totalStockValueElement = document.getElementById('totalStockValue');
     
-
+    if (firstName && lastName) {
+        // Set the display content to 'First Last' format
+        userNameElement.textContent = `${firstName} ${lastName}`;
+    } else {
+        console.error('First name or last name not found in localStorage');
+        // Handle the case where there is no first name or last name in localStorage, maybe redirect to login
+    }
     // Set the display content to username if available, otherwise use email
     userNameElement.textContent = username || userEmail; 
 
