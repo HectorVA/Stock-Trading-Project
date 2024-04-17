@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                const positiveStocks = data.portfolio.filter(stock => stock.totalShares > 0);
                 const portfolioSection = document.querySelector('.portfolio ul');
                 const formatter = new Intl.NumberFormat('en-US', {
                     style: 'currency',
@@ -63,15 +64,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 portfolioSection.innerHTML = '';
 
                 // Generate and append new list items
-                data.portfolio.forEach(stock => {
+                positiveStocks.forEach(stock => {
                     const listItem = document.createElement('li');
                     listItem.textContent = `${stock.symbol} - Quantity: ${stock.totalShares}, Value: ${formatter.format(stock.totalValue)}`;
                     portfolioSection.appendChild(listItem);
                 });
 
                 // Update the Total Stock Value in the Balance section
-                const totalStockValueElement = document.querySelector('.balance p');
-                totalStockValueElement.textContent = `Total Stock Value: ${formatter.format(data.totalValue)}`;
+                const totalValue = positiveStocks.reduce((acc, stock) => acc + stock.totalValue, 0);
+                totalStockValueElement.textContent = `Total Stock Value: ${formatter.format(totalValue)}`;
             } else {
                 console.error('Failed to fetch portfolio: ' + data.message);
             }
