@@ -32,8 +32,42 @@ function createNewStock(companyName, stockTicker, volume, initialPrice) {
     });
 }
 
+// This function will check if trading is allowed based on local time
+function isTradingAllowed() {
+    const marketHoursEnabled = localStorage.getItem('marketHoursEnabled') === 'true';
+    if (!marketHoursEnabled) {
+        return true; // Market hour restrictions are disabled
+    }
+
+    const now = new Date();
+    const hour = now.getHours();
+    const day = now.getDay();
+
+    // Check if the current time is within market hours: 7 AM to 2 PM, Monday (1) to Friday (5)
+    return hour >= 7 && hour < 14 && day >= 1 && day <= 5;
+}
+
+// Function to toggle market hours restriction
+function toggleMarketHours() {
+    const marketHoursEnabled = localStorage.getItem('marketHoursEnabled') === 'true';
+    localStorage.setItem('marketHoursEnabled', !marketHoursEnabled);
+
+    // Update the button text based on the new state
+    const toggleBtn = document.getElementById('toggleMarketHoursBtn');
+    if (marketHoursEnabled) {
+        toggleBtn.textContent = 'Disable Outside Market Trading';
+    } else {
+        toggleBtn.textContent = 'Enable Outside Market Trading';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
+    // Set initial state of the market hours button based on stored value
+    const marketHoursEnabled = localStorage.getItem('marketHoursEnabled') === 'true';
+    const toggleBtn = document.getElementById('toggleMarketHoursBtn');
+    toggleBtn.textContent = marketHoursEnabled ? 'Disable Outside Market Trading' : 'Enable Outside Market Trading';
+    toggleBtn.addEventListener('click', toggleMarketHours);
     
     // Check if the stored user email indicates an admin user
     const isAdmin = localStorage.getItem('isAdmin') === 'true';

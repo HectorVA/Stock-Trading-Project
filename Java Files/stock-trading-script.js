@@ -40,6 +40,10 @@ function updateStockDisplay(stocks) {
 }
 
 function buyStock(userName, stockSymbol, quantity) {
+    if (!isTradingAllowed()) {
+        alert('Trading is currently not allowed outside market hours.');
+        return; // Exit the function if trading is not allowed
+    }
     if (!confirm(`Are you sure you want to buy ${quantity} shares of ${stockSymbol}?`)) {
         console.log('Purchase cancelled by the user.');
         return; // Exit the function if the user cancels the confirmation dialog
@@ -76,6 +80,14 @@ function buyStock(userName, stockSymbol, quantity) {
 }
 
 function sellStock(userName, stockSymbol, quantity) {
+    if (!isTradingAllowed()) {
+        alert('Trading is currently not allowed outside market hours.');
+        return; // Exit the function if trading is not allowed
+    }
+    if (!confirm(`Are you sure you want to sell ${quantity} shares of ${stockSymbol}?`)) {
+        console.log('Sale cancelled by the user.');
+        return; // Exit the function if the user cancels the confirmation dialog
+    }
     fetch('http://54.176.181.88:3000/sell-stock', {
         method: 'POST',
         headers: {
