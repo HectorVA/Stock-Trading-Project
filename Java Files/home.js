@@ -35,7 +35,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 const formattedBalance = formatter.format(data.balance);
                 // Update the Purchasing Power element with the formatted balance
                 const purchasingPowerElement = document.getElementById('purchasingPower');
-                purchasingPowerElement.textContent = formattedBalance;
+                if (formattedBalance === "$0.00") {
+                    purchasingPowerElement.textContent = "You're broke, kid";
+                } else {
+                    purchasingPowerElement.textContent = formattedBalance;
+                }
             } else {
                 console.error('Failed to fetch balance: ' + data.message);
             }
