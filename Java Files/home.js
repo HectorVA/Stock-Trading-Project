@@ -1,10 +1,7 @@
 // home-script.js
 document.addEventListener('DOMContentLoaded', function () {
     // Retrieve stored user data
-    
-    const userEmail = localStorage.getItem('userEmail');
     const username = localStorage.getItem('userName'); 
-    const userNameElement = document.getElementById('userName');
     const totalStockValueElement = document.getElementById('totalStockValue');
     const firstName = localStorage.getItem('firstName');
     const lastName = localStorage.getItem('lastName');
@@ -17,8 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('First name or last name not found in localStorage');
         // Handle the case where there is no first name or last name in localStorage, maybe redirect to login
     }
-    // Set the display content to username if available, otherwise use email
-    userNameElement.textContent = username || userEmail; 
+    
     
 
     // Check if the stored user email indicates an admin user
