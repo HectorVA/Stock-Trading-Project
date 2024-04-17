@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // Set the display content to username if available, otherwise use email
     userNameElement.textContent = username || userEmail; 
+    
 
     // Check if the stored user email indicates an admin user
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
