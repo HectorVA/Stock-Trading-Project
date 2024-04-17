@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Set initial state of the market hours button based on stored value
     const marketHoursEnabled = localStorage.getItem('marketHoursEnabled') === 'true';
     const toggleBtn = document.getElementById('toggleMarketHoursBtn');
-    toggleBtn.textContent = marketHoursEnabled ? 'Disable Outside Market Trading' : 'Enable Outside Market Trading';
+    toggleBtn.textContent = marketHoursEnabled ? 'Enable Outside Market Trading' : 'Disable Outside Market Trading';
     toggleBtn.addEventListener('click', toggleMarketHours);
     
     // Check if the stored user email indicates an admin user
