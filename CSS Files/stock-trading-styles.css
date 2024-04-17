@@ -72,23 +72,28 @@ header img {
     box-sizing: border-box;
     overflow: hidden;
     margin: 20px auto; /* Center the container */
+    max-width: 1200px;
 }
 
 .centered-content {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start; /* Changed from space-between to flex-start */
+    flex-direction: column;
+    align-items: center;
     margin-top: 10px;
     width: 100%;
 }
 
 .stock-info,
 .buy-sell-form {
-    flex: 1 1 45%; /* Allows flexibility and takes up to 45% of the container width */
+    flex: 1 1 45%; 
     box-sizing: border-box;
-    margin: 0 10px 20px 10px; /* Adjust margins for spacing */
-    /* Remove the calc(50% - 20px) and let flexbox handle the sizing */
+    margin: 0 10px 20px 10px; 
+    width: 100%; /* Set width to 100% for full width on mobile */
+    max-width: 400px; /* Max width of the form for larger screens */
+    margin: 0 auto 20px; /* Center the form with automatic margins and add space below */
+   
 }
+
 
 .stock-info h2,
 .buy-sell-form h2 {
@@ -99,7 +104,20 @@ header img {
     border: 2px solid #b36e00;
     border-radius: 8px;
     padding: 10px;
-    margin-bottom: 10px;
+    width: 100%; /* Let the grid manage the width */
+    box-sizing: border-box;
+    margin-bottom: 0; /* No need for margin bottom, grid-gap handles this */
+    text-align: center; /* Center text for aesthetics */
+    }
+
+.stock-info {
+    width: 100%; /* Set to full width to utilize max space for grid */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Creates a responsive grid */
+    grid-gap: 10px; /* Spacing between grid items */
+    justify-items: center; /* Center items in their cells */
+    margin-bottom: 20px; /* Add space below the grid */
+    padding: 10px;    
 }
 
 .stock p {
@@ -112,7 +130,7 @@ header img {
 .buy-sell-form button {
     display: block;
     margin-bottom: 10px;
-    width: 25%; /* Change inputs and buttons width  */
+    width: 100%; /* Change inputs and buttons width  */
 }
 
 .buy-sell-form button {
@@ -146,10 +164,16 @@ footer {
 
 /* Media Queries */
 
-@media (max-width: 1200px) {
+@media (min-width: 1200px) {
     form, .container.stock-trading-section {
         flex: 0 1 calc(95% - 20px);
         margin: 0 10px;
+    }
+    .container.stock-trading-section {
+        width: 95%; /* Use percentage for responsive width */
+    }
+    .stock-info {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Increase min-width for larger screens */
     }
 }
 
@@ -157,6 +181,9 @@ footer {
     form, .container.stock-trading-section  {
         flex: 0 1 calc(95% - 20px);
         margin: 0 10px;
+    }
+    .stock-info {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Less columns on smaller screens */
     }
 }
 
@@ -167,14 +194,21 @@ footer {
         flex: 1 1 100%; /* Each element takes full width on smaller screens */
         margin: 10px 0; /* Adjust margin to only top and bottom */
     }
+    .stock-info {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
 }
 
 
 @media (max-width: 576px) {
+    .stock-info {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
     .buy-sell-form label,
     .buy-sell-form input,
     .buy-sell-form select,
     .buy-sell-form button {
-        width: 100%; /* Ensure form elements take full width */
+    width: 100%;
     }
 }
+
