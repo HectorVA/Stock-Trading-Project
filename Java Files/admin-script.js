@@ -54,7 +54,7 @@ function toggleMarketHours() {
 
     // Update the button text based on the new state
     const toggleBtn = document.getElementById('toggleMarketHoursBtn');
-    if (marketHoursEnabled) {
+    if (!marketHoursEnabled) {
         toggleBtn.textContent = 'Disable Outside Market Trading';
     } else {
         toggleBtn.textContent = 'Enable Outside Market Trading';
