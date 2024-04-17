@@ -6,10 +6,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const username = localStorage.getItem('userName'); 
     const userNameElement = document.getElementById('userName');
     const totalStockValueElement = document.getElementById('totalStockValue');
+    const firstName = localStorage.getItem('firstName');
+    const lastName = localStorage.getItem('lastName');
+    const fullNameElement = document.getElementById('fullName');
     
     if (firstName && lastName) {
         // Set the display content to 'First Last' format
-        userNameElement.textContent = `${firstName} ${lastName}`;
+        fullNameElement.textContent = `${firstName} ${lastName}`;
     } else {
         console.error('First name or last name not found in localStorage');
         // Handle the case where there is no first name or last name in localStorage, maybe redirect to login
