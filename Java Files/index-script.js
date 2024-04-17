@@ -65,9 +65,12 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 alert('Logged in successfully!');
-                localStorage.setItem('userName', data.username); // Use the username key as provided by the server
-                localStorage.setItem('userEmail', data.email); // Use the email key as provided by the server
+                localStorage.setItem('userName', data.username);
+                localStorage.setItem('userEmail', data.email); 
                 localStorage.setItem('isAdmin', data.isAdmin);
+                localStorage.setItem('firstName', data.firstName);
+                localStorage.setItem('lastName', data.lastName);
+                
         
                 // Redirect to home.html after successful login
                 window.location.href = 'home.html';
