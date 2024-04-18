@@ -33,6 +33,8 @@ function updateStockDisplay(stocks) {
             <h3>Stock Ticker: ${stock.Symbol}</h3>
             <p>Price: $${stock.Price_Per_Share}</p>
             <p>Volume: ${stock.Available_Shares}</p>
+            <p>High: $${stock.High}</p>
+            <p>Low: $${stock.Low}</p>
             <!-- More details here -->
         `;
         stockInfoDiv.appendChild(stockDiv);
@@ -164,8 +166,6 @@ document.addEventListener('DOMContentLoaded', function () {
         transactionTypeInput.value = 'buy';
     });
 });
-
-
 
 
 
