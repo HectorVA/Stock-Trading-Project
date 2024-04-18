@@ -31,6 +31,7 @@ function updateStockDisplay(stocks) {
         stockDiv.classList.add('stock');
         stockDiv.innerHTML = `
             <h3>Stock Ticker: ${stock.Symbol}</h3>
+            <p>Opening Price: $${stock.Opening_Price}</p>
             <p>Price: $${stock.Price_Per_Share}</p>
             <p>Volume: ${stock.Available_Shares}</p>
             <p>High: $${stock.High}</p>
@@ -166,7 +167,3 @@ document.addEventListener('DOMContentLoaded', function () {
         transactionTypeInput.value = 'buy';
     });
 });
-
-
-
-
