@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('Is admin:', isAdmin); 
         document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
 
-        fetch('http://13.56.193.85:3000/create-account', {
+        fetch('http://127.0.0.1:3000/create-account', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
