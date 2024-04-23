@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('Is admin:', isAdmin); 
         document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
 
-        fetch('http://127.0.0.1:3000/create-account', {
+        fetch('http://ec2-13-56-193-85.us-west-1.compute.amazonaws.com/api/create-account', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
