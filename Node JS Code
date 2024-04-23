@@ -1,0 +1,441 @@
+const mysql = require('mysql');
+const express = require('express');
+const cors = require('cors');
+
+const app = express();
+
+app.use(express.json());
+
+app.use(cors());
+
+const connection = mysql.createConnection({
+  host: 'stock-database.c10macm00l4k.us-west-1.rds.amazonaws.com',
+  user: 'admin',
+  database: 'STOCK_DATABASE',
+  port: 3306,
+  multipleStatements: true 
+});
+
+connection.connect((err) => {
+  if (err) {
+   console.error('Error connecting to the database: ' + err);
+   return;
+  }
+  console.log('Successfully connected to the database.');
+
+connection.query('DROP EVENT IF EXISTS SetOpeningPrice;', (error) => {
+	if (error) {
+	console.error('Error dropping event:', error);
+	return;
+	}
+	console.log('Event dropped, or there was no event to drop.');
+
+const createEventSql = `CREATE EVENT SetOpeningPrice ON SCHEDULE EVERY 1 DAY STARTS CONCAT(CURDATE(), ' 14:00:00') DO UPDATE Stock_Information SET Opening_Price = IF(Opening_Price IS NULL, Price_Per_Share, Opening_Price)`;
+
+    connection.query(createEventSql, (error) => {
+      if (error) {
+        console.error('Error creating event:', error);
+      } else {
+        console.log('Event SetOpeningPrice created or already exists.');
+      }
+    });
+  });
+
+
+const resetOpeningPriceSql = `DROP EVENT IF EXISTS ResetOpeningPrice; CREATE EVENT ResetOpeningPrice ON SCHEDULE EVERY 1 DAY STARTS CONCAT(CURDATE(), ' 7:00:00') DO UPDATE Stock_Information SET Opening_Price = NULL;`;
+
+  connection.query(resetOpeningPriceSql, (error) => {
+    if (error) {
+      console.error('Error creating ResetOpeningPrice event:', error);
+    } else {
+      console.log('Event ResetOpeningPrice created or already exists.');
+    }
+  });
+
+  connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+   if (error) throw error;
+   console.log('The solution is: ', results[0].solution);
+ });
+});
+
+app.get('/', (req, res) => {
+   res.send('Hello World');
+});
+
+
+app.post('/create-account', (req, res) => {
+ const { FirstName, LastName, Username, Email, Password } = req.body;
+
+ const createUserSql = "INSERT INTO Customer_Information (Username, FirstName, LastName, Email, Password) VALUES (?, ?, ?, ?, ?)";
+
+ connection.query(createUserSql, [Username, FirstName, LastName, Email, Password], (error, results, fields) => {
+  if (error) {
+   console.error('Failed to create new user:', error);
+   res.status(500).json({ success: false, message: 'Failed to create account' });
+   return;
+  }
+  res.status(201).json({ success: true, message: 'Account created successfully' });
+ });
+});
+
+app.post('/login', (req, res) => {
+ const { Username, Password } = req.body;
+
+ const checkUserQuery = 'SELECT Email, Username, FirstName, LastName FROM Customer_Information WHERE Username = ? AND Password = ?';
+
+ connection.query(checkUserQuery, [Username, Password], (error, results, fields) => {
+  if (error) {
+   console.error('Login error:', error);
+   res.status(500).json({ success: false, message: 'Error during login' });
+   return;
+  }
+
+  if (results.length > 0) {
+
+  const user = results[0];
+  const isAdmin = user.Email.includes('@admin.tradewise.com');
+
+   res.json({ success: true,
+   message: 'Logged in successfully',
+   email: user.Email,
+   username: user.Username,
+   firstName: user.FirstName,
+   lastName: user.LastName,
+   isAdmin
+  });
+  } else {
+    res.status(401).json({ success: false, message: 'Incorrect username or password' });
+  }
+ });
+});
+
+setInterval(() => {
+const updatePriceSql = `UPDATE Stock_Information SET Price_Per_Share = GREATEST(1, Price_Per_Share + (FLOOR(1 + RAND() * (10 - 1))) * CASE WHEN RAND() < 0.5 THEN -1 ELSE 1 END), High = IF(High IS NULL OR High < Price_Per_Share, Price_Per_Share, High), Low = IF(Low IS NULL OR Low > Price_Per_Share OR Low = 0, Price_Per_Share, Low);`;
+
+	connection.query(updatePriceSql, (error, results, fields) => {
+		if (error) {
+			return console.error('Error updating prices:', error);
+		}
+		console.log('Prices updated');
+	});
+}, 5000);
+
+app.get('/stocks', (req, res) => {
+	const selectStockSql = "SELECT * FROM Stock_Information";
+	connection.query(selectStockSql, (error, results, fields) => {
+		if (error) {
+			console.error('Error fetching stocks:', error);
+			return res.status(500).send('Error fetching stocks');
+		}
+		res.setHeader('Content-Type', 'application/json');
+		res.json(results);
+	});
+});
+
+app.post('/transaction', (req, res) => {
+    const { userName, amount, transactionType } = req.body;
+
+    if (!userName || amount === undefined || !transactionType) {
+        return res.status(400).json({ success: false, message: 'Missing parameters' });
+    }
+
+    // Determine the correct SQL statement for the balance update
+    let balanceUpdateSql = `UPDATE Customer_Information SET Balance = Balance ${transactionType === 'deposit' ? '+' : '-'} ? WHERE Username = ?`;
+
+    // Start a transaction
+    connection.beginTransaction(err => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Error starting transaction', error: err });
+        }
+
+        // Update the user's balance
+        connection.query(balanceUpdateSql, [amount, userName], (err, balanceUpdateResults) => {
+            if (err || balanceUpdateResults.affectedRows === 0) {
+                return connection.rollback(() => {
+                    res.status(500).json({ success: false, message: 'Error updating user balance' });
+                });
+            }
+
+            // Prepare the SQL for inserting into Account_Transaction_History
+            let insertTransactionSql;
+            let queryParams;
+            if (transactionType === 'deposit') {
+                insertTransactionSql = "INSERT INTO Account_Transaction_History (Username, Cash_Deposit, Transaction_Total) VALUES (?, ?, ?);";
+                queryParams = [userName, amount, amount];
+            } else {
+                insertTransactionSql = "INSERT INTO Account_Transaction_History (Username, Cash_Withdraw, Transaction_Total) VALUES (?, ?, ?);";
+                queryParams = [userName, amount, -amount];
+            }
+
+            // Insert the transaction into Account_Transaction_History
+            connection.query(insertTransactionSql, queryParams, (err, insertResults) => {
+                if (err) {
+                    return connection.rollback(() => {
+                        res.status(500).json({ success: false, message: 'Error inserting transaction history', error: err });
+                    });
+                }
+
+                // Commit the transaction
+                connection.commit(err => {
+                    if (err) {
+                        return connection.rollback(() => {
+                            res.status(500).json({ success: false, message: 'Error committing transaction', error: err });
+                        });
+                    }
+                    res.json({ success: true, message: 'Transaction completed successfully' });
+                });
+            });
+        });
+    });
+});
+
+app.get('/balance', (req, res) => {
+    const userName = req.query.userName;
+
+    if (!userName) {
+        return res.status(400).json({ success: false, message: 'Username is required.' });
+    }
+
+    const selectBalanceSql = "SELECT Balance FROM Customer_Information WHERE Username = ?";
+
+    connection.query(selectBalanceSql, [userName], (error, results, fields) => {
+        if (error) {
+            console.error('Error fetching balance:', error);
+            return res.status(500).json({ success: false, message: 'Error fetching balance' });
+       } 
+
+        if (results.length > 0) {
+            const userBalance = results[0].Balance;
+            res.json({ success: true, balance: userBalance });
+        } else {
+            res.status(404).json({ success: false, message: 'User not found' });
+        }
+    });
+});
+
+// Endpoint to create a new stock in the database
+app.post('/create_stock', (req, res) => {
+    // Destructure and get the stock information from the request body
+    const { Symbol, Name, Available_Shares, Price_Per_Share } = req.body;
+
+    // Check if all required stock information is provided
+    if (!Symbol || !Name || Available_Shares === undefined || Price_Per_Share === undefined) {
+        return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+
+    // Create SQL statement to insert a new stock
+    const createStockSql = `INSERT INTO Stock_Information (Symbol, Name, Available_Shares, Price_Per_Share, Opening_Price)VALUES (?, ?, ?, ?, ?)`;
+
+    // Execute the query to insert the stock
+    connection.query(createStockSql, [Symbol, Name, Available_Shares, Price_Per_Share, Price_Per_Share], (error, results, fields) => {
+        if (error) {
+            // Handle the error for a duplicate entry and any other errors
+            if (error.code === 'ER_DUP_ENTRY') {
+                res.status(409).json({ success: false, message: 'Stock with this symbol already exists' });
+            } else {
+                console.error('Failed to create new stock:', error);
+                res.status(500).json({ success: false, message: 'Failed to create new stock', error: error.message });
+            }
+            return;
+        }
+        // Send success response
+        res.status(201).json({ success: true, message: 'New stock created successfully' });
+    });
+});
+
+app.post('/buy-stock', (req, res) => {
+    const { username, symbol, quantity } = req.body;
+
+    //Check if there are enough available shares
+    const checkStockSql = 'SELECT Available_Shares, Price_Per_Share FROM Stock_Information WHERE Symbol = ?';
+    connection.query(checkStockSql, [symbol], (error, stockResults) => {
+        if (error) return res.status(500).json({ success: false, message: 'Error checking stock availability' });
+
+        if (stockResults.length === 0 || stockResults[0].Available_Shares < quantity) {
+            return res.status(400).json({ success: false, message: 'Not enough shares available' });
+        }
+
+        const pricePerShare = stockResults[0].Price_Per_Share;
+        const transactionTotal = pricePerShare * quantity;
+
+        //Check if the user has enough balance
+        const checkBalanceSql = 'SELECT Balance FROM Customer_Information WHERE Username = ?';
+        connection.query(checkBalanceSql, [username], (balanceError, balanceResults) => {
+            if (balanceError) return res.status(500).json({ success: false, message: 'Error checking user balance' });
+
+            if (balanceResults.length === 0 || balanceResults[0].Balance < transactionTotal) {
+                return res.status(400).json({ success: false, message: 'Insufficient balance' });
+            }
+
+            // Proceed with updating stock information, user balance, and recording the transaction
+            connection.beginTransaction(err => {
+                if (err) throw err;
+
+                //Update Stock Information
+                const updateStockSql = 'UPDATE Stock_Information SET Available_Shares = Available_Shares - ? WHERE Symbol = ?';
+                connection.query(updateStockSql, [quantity, symbol], (updateStockError) => {
+                    if (updateStockError) {
+                        return connection.rollback(() => {
+                            throw updateStockError;
+                        });
+                    }
+
+                    //Update User Balance
+                    const updateUserBalanceSql = 'UPDATE Customer_Information SET Balance = Balance - ? WHERE Username = ?';
+                    connection.query(updateUserBalanceSql, [transactionTotal, username], (updateBalanceError) => {
+                        if (updateBalanceError) {
+                            return connection.rollback(() => {
+                                throw updateBalanceError;
+                            });
+                        }
+
+                        //Record the Transaction
+                        const recordTransactionSql = 'INSERT INTO Stock_Transaction_History (Date, Time, Username, Symbol, Quantity_Of_Shares, Price_Per_Share, Transaction_Total) VALUES (CURDATE(), CURTIME(), ?, ?, ?, ?, ?)';
+                        connection.query(recordTransactionSql, [username, symbol, quantity, pricePerShare, transactionTotal], (recordError) => {
+                            if (recordError) {
+                                return connection.rollback(() => {
+                                    throw recordError;
+                                });
+                            }
+
+                            connection.commit((commitErr) => {
+                                if (commitErr) {
+                                    return connection.rollback(() => {
+                                        throw commitErr;
+                                    });
+                                }
+
+                                res.json({ success: true, message: 'Stock purchased successfully' });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
+app.post('/sell-stock', (req, res) => {
+    const { username, symbol, quantity } = req.body;
+
+   // Calculate the net ownership from the transaction history
+    const netOwnershipSql = `SELECT SUM(CASE WHEN Transaction_Type = 'buy' THEN Quantity_Of_Shares WHEN Transaction_Type = 'sell' THEN -Quantity_Of_Shares ELSE 0 END) AS NetQuantity FROM Stock_Transaction_History WHERE Username = ? AND Symbol = ?`;
+
+    connection.query(netOwnershipSql, [username, symbol], (error, results) => {
+        if (error) {
+            console.error('Error checking stock ownership:', error);
+            return res.status(500).json({ success: false, message: 'Error checking stock ownership' });
+        }
+
+        // If no results are returned, this could mean the user has never transacted this stock.
+        if (results.length === 0) {
+            return res.status(400).json({ success: false, message: 'No shares owned to sell' });
+        }
+
+        const netQuantity = results[0].NetQuantity || 0;
+        if (netQuantity < quantity) {
+            return res.status(400).json({ success: false, message: 'Not enough shares owned to sell' });
+        }
+
+        const getPriceSql = 'SELECT Price_Per_Share FROM Stock_Information WHERE Symbol = ?';
+        connection.query(getPriceSql, [symbol], (priceError, priceResults) => {
+            if (priceError) return res.status(500).json({ success: false, message: 'Error getting stock price' });
+
+            const pricePerShare = priceResults[0].Price_Per_Share;
+            const transactionTotal = pricePerShare * quantity;
+
+            connection.beginTransaction(err => {
+                if (err) throw err;
+
+    // Update Stock_Transaction_History to reflect the sale
+    const recordTransactionSql = `INSERT INTO Stock_Transaction_History (Date, Time, Username, Symbol, Quantity_Of_Shares, Price_Per_Share, Transaction_Total, Transaction_Type) VALUES (CURDATE(), CURTIME(), ?, ?, ?, ?, ?, 'sell')`;
+    connection.query(recordTransactionSql, [username, symbol, -quantity, pricePerShare, -transactionTotal], (recordError) => {
+        if (recordError) {
+            console.error('Error recording transaction:', recordError);
+            return connection.rollback(() => {
+                res.status(500).json({ success: false, message: 'Error recording transaction' });
+            });
+        }
+
+    // Update user balance
+    const updateUserBalanceSql = 'UPDATE Customer_Information SET Balance = Balance + ? WHERE Username = ?';
+    connection.query(updateUserBalanceSql, [transactionTotal, username], (updateBalanceError) => {
+        if (updateBalanceError) {
+            console.error('Error updating user balance:', updateBalanceError);
+            return connection.rollback(() => {
+                res.status(500).json({ success: false, message: 'Error updating user balance' });
+            });
+        }
+
+        // Commit the transaction
+        connection.commit((commitErr) => {
+            if (commitErr) {
+                console.error('Error committing transaction:', commitErr);
+                return connection.rollback(() => {
+                    res.status(500).json({ success: false, message: 'Error committing transaction' });
+                });
+            }
+
+                                res.json({ success: true, message: 'Stock sold successfully' });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+app.get('/user-transactions', (req, res) => {
+    const { userName } = req.query;
+
+    const getTransactionsSql = ` SELECT * FROM Stock_Transaction_History WHERE Username = ? ORDER BY Date DESC, Time DESC`;
+
+    connection.query(getTransactionsSql, [userName], (error, results) => {
+        if (error) {
+            console.error('Error fetching user transaction history:', error);
+            return res.status(500).json({ success: false, message: 'Error fetching user transaction history' });
+        }
+
+        res.json(results);
+    });
+});
+
+app.get('/portfolio', (req, res) => {
+    const username = req.query.userName;
+
+    if (!username) {
+        return res.status(400).json({ success: false, message: 'Username is required' });
+    }
+
+    const portfolioSql = `SELECT h.Symbol, SUM(h.Quantity_Of_Shares) as TotalShares, s.Price_Per_Share FROM Stock_Transaction_History h INNER JOIN Stock_Information s ON h.Symbol = s.Symbol WHERE h.Username = ? GROUP BY h.Symbol`;
+
+    connection.query(portfolioSql, [username], (error, results) => {
+        if (error) {
+            console.error('Error fetching portfolio:', error);
+            return res.status(500).json({ success: false, message: 'Error fetching portfolio' });
+        }
+
+        let totalValue = 0;
+        results.forEach(stock => {
+            totalValue += stock.TotalShares * stock.Price_Per_Share;
+        });
+
+        res.json({
+            success: true,
+            portfolio: results.map(stock => ({
+                symbol: stock.Symbol,
+                totalShares: stock.TotalShares,
+                pricePerShare: stock.Price_Per_Share,
+                totalValue: stock.TotalShares * stock.Price_Per_Share
+            })),
+            totalValue: totalValue
+        });
+    });
+});
+
+
+const port = 3000;
+app.listen(3000, () => {
+ console.log(`Server is running.`);
+});
+
