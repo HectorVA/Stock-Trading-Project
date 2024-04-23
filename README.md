@@ -2,7 +2,7 @@ This is a public repo for my ASU Capstone class.
 The capstone class encapsulates all my previous classes into one by taking all that I've learned throughout my degree coursework and applying it to a real-world business case.
 Below were the requirements that this project had to meet. 
 
-This project is currently being hosted on AWS and the link will be provided on my resume for future job applications. 
+This project is currently being hosted on AWS and the link will be provided on request future job applications. 
 
 Project Definition:
 
