@@ -53,7 +53,7 @@ header img {
     padding: 10px 20px;
     margin: 5px;
     background-color: #b36e00;
-    border: none; /* Assuming you want to remove the border to match other nav items */
+    border: none;
     border-radius: 4px;
     cursor: pointer; /* Indicates it's clickable */
     transition: background-color 0.3s ease;

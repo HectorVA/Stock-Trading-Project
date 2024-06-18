@@ -42,36 +42,36 @@ header img {
 }
 
 #navbar li:last-child {
-    margin-right: 0; /* No margin for the last item */
+    margin-right: 0; 
 }
 
 #navbar a,
-#navbar .logout-button { /* This applies the styles to both your anchor tags and the logout button */
+#navbar .logout-button { 
     display: inline-block;
     text-decoration: none;
     color: #fff;
     padding: 10px 20px;
     margin: 5px;
     background-color: #b36e00;
-    border: none; /* Assuming you want to remove the border to match other nav items */
+    border: none; 
     border-radius: 4px;
-    cursor: pointer; /* Indicates it's clickable */
+    cursor: pointer; 
     transition: background-color 0.3s ease;
 }
 
 #navbar a:hover,
-#navbar .logout-button:hover { /* Match the hover effect for both */
+#navbar .logout-button:hover { 
     background-color: #00008b;
 }
 
-.container.stock-trading-section {
+.container-stock-trading-section {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 80%;
     box-sizing: border-box;
     overflow: hidden;
-    margin: 20px auto; /* Center the container */
+    margin: 20px auto; 
     max-width: 1200px;
 }
 
@@ -144,12 +144,6 @@ header img {
 
 .buy-sell-form button:hover {
     background-color: #2980b9;
-}
-
-.stock-chart {
-    width: 50%; /* Change stock width ? */
-    box-sizing: border-box;
-    margin: 0 10px 20px 10px auto; /* Adjust margins for spacing between sections */
 }
 
 footer {

@@ -146,9 +146,6 @@ footer {
     border-top: 2px solid #004080;
 }
 
-/* Media Queries */
-
-/* Hamburger Icon Styles */
 #hamburger {
     display: none; /* It should not display on larger screens */
     flex-direction: column;
@@ -168,14 +165,14 @@ footer {
 }
 
 
-/* Media Query */
+
 @media (max-width: 576px) {
-    /* Hamburger */
+ 
     #hamburger {
         display: flex;
     }
 
-    /* Hide the full nav menu */
+ 
     #navbar ul {
         flex-direction: column;
         width: 100%;
@@ -204,7 +201,6 @@ footer {
         background-color: #b36e00;
     }
 
-    /* Container to slide in nav */
     #navbar {
         display: none; /* Hidden by default, shown when menu is toggled */
         flex-direction: column;

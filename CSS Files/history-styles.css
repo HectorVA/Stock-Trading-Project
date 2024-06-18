@@ -78,7 +78,7 @@ header img {
 }
 
 .result-section {
-    width: 100%; /* Make result section full width */
+    width: 100%; 
     box-sizing: border-box;
     padding: 20px;
     margin: 20px;
