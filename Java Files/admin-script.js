@@ -15,7 +15,7 @@ function createNewStock(companyName, stockTicker, volume, initialPrice) {
     };
     
     // Make a fetch POST request to your server's endpoint for creating new stocks
-    fetch('http://54.176.181.88:3000/create_stock', {
+    fetch('/api/create_stock', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

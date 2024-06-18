@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('Is admin:', isAdmin); 
         document.getElementById('adminLink').style.display = isAdmin ? 'block' : 'none';
 
-        fetch('http://54.176.181.88:3000/create-account', {
+        fetch('/api/create-account', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var userName = document.getElementById('loginUserName').value;
         var password = document.getElementById('loginPassword').value;
     
-        fetch('http://54.176.181.88:3000/login', {
+        fetch('/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

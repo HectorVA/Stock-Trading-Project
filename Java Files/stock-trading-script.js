@@ -11,7 +11,7 @@ function logout() {
 function fetchStocks() {
     const userEmail = localStorage.getItem('userEmail');
     if (userEmail) {
-        fetch('http://54.176.181.88:3000/stocks')
+        fetch('/api/stocks')
             .then(response => response.json())
             .then(stocks => {
                 updateStockDisplay(stocks);
@@ -51,7 +51,7 @@ function buyStock(userName, stockSymbol, quantity) {
         console.log('Purchase cancelled by the user.');
         return; // Exit the function if the user cancels the confirmation dialog
     }
-    fetch('http://54.176.181.88:3000/buy-stock', {
+    fetch('/api/buy-stock', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -91,7 +91,7 @@ function sellStock(userName, stockSymbol, quantity) {
         console.log('Sale cancelled by the user.');
         return; // Exit the function if the user cancels the confirmation dialog
     }
-    fetch('http://54.176.181.88:3000/sell-stock', {
+    fetch('/api/sell-stock', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

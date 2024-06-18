@@ -17,7 +17,7 @@ function updateDisplayedTotal(newBalance) {
 }
  // Function to update the total on the server
 function updateTotalOnServer(amount, transactionType, userName) {
-    fetch('http://54.176.181.88:3000/transaction', {
+    fetch('/api/transaction', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -49,7 +49,7 @@ function initializeBalance() {
     const userName = localStorage.getItem('userName');
 
     if (userName) {
-        fetch(`http://54.176.181.88:3000/balance?userName=${encodeURIComponent(userName)}`)
+        fetch(`http://ec2-13-56-193-85.us-west-1.compute.amazonaws.com/api/balance?userName=${encodeURIComponent(userName)}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {

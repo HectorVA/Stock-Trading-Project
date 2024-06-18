@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (username) {
         // Fetch balance from the server using the /balance endpoint
-        fetch(`http://54.176.181.88:3000/balance?userName=${encodeURIComponent(username)}`)
+        fetch(`http://ec2-13-56-193-85.us-west-1.compute.amazonaws.com/api/balance?userName=${encodeURIComponent(username)}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (username) {
-        fetch(`http://54.176.181.88:3000/portfolio?userName=${encodeURIComponent(username)}`)
+        fetch(`http://ec2-13-56-193-85.us-west-1.compute.amazonaws.com/api/portfolio?userName=${encodeURIComponent(username)}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {

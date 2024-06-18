@@ -14,7 +14,7 @@
     });
     
     function fetchTransactionHistory(userName) {
-        fetch(`http://54.176.181.88:3000/user-transactions?userName=${encodeURIComponent(userName)}`)
+        fetch(`http://ec2-13-56-193-85.us-west-1.compute.amazonaws.com/api/user-transactions?userName=${encodeURIComponent(userName)}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
